@@ -143,8 +143,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		06F0F363C243264C92DFC133 /* Math.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Math.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Math.hpp; sourceTree = SOURCE_ROOT; };
-		09CFD9F50D9959DA79A86090 /* Encoder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Encoder.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Encoder.hpp; sourceTree = SOURCE_ROOT; };
+		06F0F363C243264C92DFC133 /* Math.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Math.hpp; path = ../libs/Sources/Math.hpp; sourceTree = SOURCE_ROOT; };
+		09CFD9F50D9959DA79A86090 /* Encoder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Encoder.hpp; path = ../libs/Sources/Encoder.hpp; sourceTree = SOURCE_ROOT; };
 		0EB4E46F1A8BA9DE000923D2 /* ofxStk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxStk.h; sourceTree = "<group>"; };
 		0EB4E4731A8BA9DE000923D2 /* ADSR.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADSR.h; sourceTree = "<group>"; };
 		0EB4E4741A8BA9DE000923D2 /* Asymp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Asymp.h; sourceTree = "<group>"; };
@@ -329,23 +329,23 @@
 		0EB4E5781A8BAB07000923D2 /* sineTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sineTable.h; sourceTree = "<group>"; };
 		0EB4E5791A8BAB07000923D2 /* stb_vorbis.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = stb_vorbis.c; sourceTree = "<group>"; };
 		0EB4E57A1A8BAB07000923D2 /* stb_vorbis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_vorbis.h; sourceTree = "<group>"; };
-		1B9F9434033B4938978C5B6F /* Source.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Source.cpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Source.cpp; sourceTree = SOURCE_ROOT; };
-		5B1610548545E583168F6C43 /* Projector.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Projector.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Projector.hpp; sourceTree = SOURCE_ROOT; };
-		77A7378F274C75F3F765A768 /* Wider.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Wider.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Wider.hpp; sourceTree = SOURCE_ROOT; };
-		84D9A06FE67AA5DCFAD9E49B /* Scope.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Scope.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Scope.hpp; sourceTree = SOURCE_ROOT; };
-		9AB084908D99621FFD9C0B01 /* Optim.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Optim.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Optim.hpp; sourceTree = SOURCE_ROOT; };
-		9B9EDE04850F7AC472939A02 /* Vector.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Vector.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Vector.hpp; sourceTree = SOURCE_ROOT; };
-		9FF65C5E35D4E4FFE8127956 /* Recomposer.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Recomposer.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Recomposer.hpp; sourceTree = SOURCE_ROOT; };
-		A332C99A17BB786BC76A19A8 /* Rotate.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Rotate.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Rotate.hpp; sourceTree = SOURCE_ROOT; };
-		AB844453D18610935B8BD926 /* Hoa.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Hoa.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Hoa.hpp; sourceTree = SOURCE_ROOT; };
-		B34C4359EE81CC580F45FE62 /* Decoder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Decoder.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Decoder.hpp; sourceTree = SOURCE_ROOT; };
+		1B9F9434033B4938978C5B6F /* Source.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Source.cpp; path = ../libs/Sources/Source.cpp; sourceTree = SOURCE_ROOT; };
+		5B1610548545E583168F6C43 /* Projector.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Projector.hpp; path = ../libs/Sources/Projector.hpp; sourceTree = SOURCE_ROOT; };
+		77A7378F274C75F3F765A768 /* Wider.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Wider.hpp; path = ../libs/Sources/Wider.hpp; sourceTree = SOURCE_ROOT; };
+		84D9A06FE67AA5DCFAD9E49B /* Scope.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Scope.hpp; path = ../libs/Sources/Scope.hpp; sourceTree = SOURCE_ROOT; };
+		9AB084908D99621FFD9C0B01 /* Optim.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Optim.hpp; path = ../libs/Sources/Optim.hpp; sourceTree = SOURCE_ROOT; };
+		9B9EDE04850F7AC472939A02 /* Vector.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Vector.hpp; path = ../libs/Sources/Vector.hpp; sourceTree = SOURCE_ROOT; };
+		9FF65C5E35D4E4FFE8127956 /* Recomposer.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Recomposer.hpp; path = ../libs/Sources/Recomposer.hpp; sourceTree = SOURCE_ROOT; };
+		A332C99A17BB786BC76A19A8 /* Rotate.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Rotate.hpp; path = ../libs/Sources/Rotate.hpp; sourceTree = SOURCE_ROOT; };
+		AB844453D18610935B8BD926 /* Hoa.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Hoa.hpp; path = ../libs/Sources/Hoa.hpp; sourceTree = SOURCE_ROOT; };
+		B34C4359EE81CC580F45FE62 /* Decoder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Decoder.hpp; path = ../libs/Sources/Decoder.hpp; sourceTree = SOURCE_ROOT; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
-		C179B7E3F58EAA0C4E126BE1 /* Signal.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Signal.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Signal.hpp; sourceTree = SOURCE_ROOT; };
-		C1B5972A2E3C4557D48DAA84 /* Defs.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Defs.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Defs.hpp; sourceTree = SOURCE_ROOT; };
-		C90BD8BCB014E74ACA4BFB97 /* Source.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Source.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Source.hpp; sourceTree = SOURCE_ROOT; };
-		CF7CC88059E619A5787C7A80 /* Tools.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Tools.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Tools.hpp; sourceTree = SOURCE_ROOT; };
+		C179B7E3F58EAA0C4E126BE1 /* Signal.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Signal.hpp; path = ../libs/Sources/Signal.hpp; sourceTree = SOURCE_ROOT; };
+		C1B5972A2E3C4557D48DAA84 /* Defs.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Defs.hpp; path = ../libs/Sources/Defs.hpp; sourceTree = SOURCE_ROOT; };
+		C90BD8BCB014E74ACA4BFB97 /* Source.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Source.hpp; path = ../libs/Sources/Source.hpp; sourceTree = SOURCE_ROOT; };
+		CF7CC88059E619A5787C7A80 /* Tools.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Tools.hpp; path = ../libs/Sources/Tools.hpp; sourceTree = SOURCE_ROOT; };
 		DB322A043499860A25CDCA44 /* ofxHoa.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxHoa.h; path = ../../../addons/ofxHoa/src/ofxHoa.h; sourceTree = SOURCE_ROOT; };
-		E27021A8B36EC5735AE8D3C8 /* Harmonics.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Harmonics.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Harmonics.hpp; sourceTree = SOURCE_ROOT; };
+		E27021A8B36EC5735AE8D3C8 /* Harmonics.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Harmonics.hpp; path = ../libs/Sources/Harmonics.hpp; sourceTree = SOURCE_ROOT; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -368,7 +368,7 @@
 		E7E077E415D3B63C0020DFD4 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		E7E077E715D3B6510020DFD4 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		E7F985F515E0DE99003869B5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = /System/Library/Frameworks/Accelerate.framework; sourceTree = "<absolute>"; };
-		F6B041386141CA41DCF7B76B /* Planewaves.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Planewaves.hpp; path = ../../../addons/ofxHoa/libs/HoaLibrary/Sources/Planewaves.hpp; sourceTree = SOURCE_ROOT; };
+		F6B041386141CA41DCF7B76B /* Planewaves.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Planewaves.hpp; path = ../libs/Sources/Planewaves.hpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -789,17 +789,9 @@
 		EA9BA723784D775C9A86500D /* libs */ = {
 			isa = PBXGroup;
 			children = (
-				F630F13C9CB9B1D0BDA004E0 /* HoaLibrary */,
-			);
-			name = libs;
-			sourceTree = "<group>";
-		};
-		F630F13C9CB9B1D0BDA004E0 /* HoaLibrary */ = {
-			isa = PBXGroup;
-			children = (
 				8549FAF63E86559DC1521334 /* Sources */,
 			);
-			name = HoaLibrary;
+			name = libs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
