@@ -1,4 +1,4 @@
-ofxAddonTemplate
+ofxHoa
 ================
 
 OpenFrameworks addon template for easier development of structurally correct addons.
