@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxHoa.h"
-
+#include "ofxMaxim.h"
 class ofApp : public ofBaseApp{
 
 	public:
@@ -19,8 +19,28 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		
+    
+        void audioOut(float * output, int bufferSize, int nChannels);
+        void audioIn(float * input, int bufferSize, int nChannels);
+        void exit();
 
-    hoa::Encoder myEncoder;
+    ofSoundStream soundStream;
+    
+    maxiOsc sine;
+    
+    float newValue, oldValue, xValue, myValue;
+    
+    float myBuffer[512], outBuffer[512], harmonicsBuffer[512];
+    
+private:
+    
+    hoa::EncoderDC<hoa::Hoa2d, float> *myEncoder;
+    
+    hoa::Decoder<hoa::Hoa2d, float> *myDecoder;
+    
+
+
+
+
     
 };
