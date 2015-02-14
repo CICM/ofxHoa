@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "ofxHoa.h"
 #include "ofxMaxim.h"
+#include "ofxStk.h"
+
 class ofApp : public ofBaseApp{
 
 	public:
@@ -30,14 +32,24 @@ class ofApp : public ofBaseApp{
     
     float newValue, oldValue, xValue, myValue;
     
-    float myBuffer[512], outBuffer[512], harmonicsBuffer[512];
+    float *inputBuffer;
+    float *harmonicsBuffer;
+    float azymuth;
+    float radius;
+    
+    int order;
+    int nInputs, nOutputs;
+    int bufferSize;
+    int sampleRate;
+    int nBuffers;
     
 private:
     
-    hoa::EncoderDC<hoa::Hoa2d, float> *myEncoder;
+    hoa::EncoderDC<hoa::Hoa2d, float> *hoaEncoder;
     
-    hoa::Decoder<hoa::Hoa2d, float> *myDecoder;
+    hoa::Decoder<hoa::Hoa2d, float> *hoaDecoder;
     
+    stk::DelayL *delays;
 
 
 
