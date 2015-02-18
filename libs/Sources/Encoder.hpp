@@ -195,7 +195,7 @@ namespace hoa
         /**	The azimuth in radian and you should prefer to use it between 0 and 2π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
          @param     azimuth	The azimuth.
          */
-        inline void setAzimuth(const T azimuth) 
+        inline void setAzimuth(const T azimuth)
         {
             m_azimuth = azimuth;
             m_cosx    = std::cos(m_azimuth);
