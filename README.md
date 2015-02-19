@@ -1,23 +1,30 @@
 ofxHoa
 ================
 
-OpenFrameworks addon template for easier development of structurally correct addons.
+ofxHoa is an openFrameworks-compatible version of the Higher Order Ambisonics (Hoa) Library. As the original library was written in c++11, ofxHoa contains a slightly modified version. Full compatibility will be provided once openFrameworks supports c++11.
 
-This template aids you as an addon author in creating an addon in a "proper" way. Doing this enables the openFrameworks community to easily use your addon, and having addons adhere to an established structure makes it easier for the openFrameworks developers to create features around contributed addons, like the addons index at ofxaddons.com.
+## Hoa Library 
 
-Download
---------
-The template contains all you need to start developing your addon. Download the template using the Download button on the right side of the github page. Unzip, rename and copy it to your addons folder.
-**PLEASE DON'T FORK** the addon template repo if you plan on creating your own addon, this will lead to confusion on the Github inheritance/forking graph, and you will unnecessarily have this repository's history in your own git repo.
+#### A high order ambisonics library.
 
-Further Steps
--------------
-`readme_author.md` contains instructions and explanations for you.
-`readme_deploy.md` is filled with a template for an informative README file you might want to use with your addon.
+Sound space is one of the principal dimensions of the contemporary musical thought, specialy in the electroacoustic music domain but also in intermedia arts. In this context, the <a title="CICM" href="http://cicm.mshparisnord.org/" target="_blank">CICM</a> has made spatialization its principal research axis. This project&#8217;s aim is to give to musician spatialization models based on high order ambisonics and sound fields synthesis. This project is developed in a part of the Paris 8 University <a title="CICM" href="http://www.labex-arts-h2h.fr/" target="_blank">LABEX arts H2H</a>. You can visit the official website : <a href="http://www.mshparisnord.fr/hoalibrary/" target="_blank"> HoaLibrary</a>.
 
-Before announcing your addon to the world, you should remove this file (`readme.md`) and the author instructions, and rename `readme_deploy.md` to `README.md`.
-Also, if you have special instructions which people should see when submitting a pull request or open an issue in your addon repository, add a `CONTRIBUTING.md` file at the root of your repository. For more details, see https://github.com/blog/1184-contributing-guidelines
+![Image](https://raw.github.com/CICM/HoaLibrary/master/Ressources/hoa-icon.png "Hoa-Icon")
 
-This template reflects the help text found at http://ofxaddons.com/howto, and will be updated from time to time by the OF developers.
+#### Authors :
 
-Thanks for listening, and happy coding!
+Julien Colafrancesco, Pierre Guillot, Eliott Paris
+
+#### Documentation :
+
+<a title="Documentation" href="http://cicm.github.io/HoaLibrary/">documentation</a>
+
+#### Dependencies : 
+
+<a title="Cblas" href="http://www.netlib.org/clapack/cblas/" target="_blank">Cblas</a>, you can use Gsl, Apple Accelerate or Intel Composer XE.
+
+##### License : 
+
+The Hoa Library in under the <a title="GNU" href="http://www.gnu.org/copyleft/gpl.html" target="_blank">GNU Public License</a>. If you'd like to avoid the restrictions of the GPL and use Hoa Library for a closed-source product, you contact the <a title="CICM" href="http://cicm.mshparisnord.org/" target="_blank">CICM</a>.
+
+

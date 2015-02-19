@@ -7,7 +7,7 @@ void ofApp::setup(){
 //    ofSoundStreamListDevices();
     
     // USE THIS FUNCTION TO SET THE AUDIO DEVICE
-//    soundStream.setDeviceID(0);
+    soundStream.setDeviceID(3);
     
     nOutputs = 2;
     nInputs = 0;
@@ -40,7 +40,7 @@ void ofApp::setup(){
     
     // LINE USED TO SMOOTH RADIUS AND AZIMUTH VALUES
     line = new PolarLines<Hoa2d, float>(1);
-    line->setRamp(20);
+    line->setRamp(100);
     smoothValues = new float[2];
     smoothValues[0] = 0.0;
     smoothValues[1] = 0.0;
