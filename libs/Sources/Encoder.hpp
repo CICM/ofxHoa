@@ -1266,10 +1266,11 @@ namespace hoa
          */
         inline void process(const T* input, T* outputs) const 
         {
-            m_encoders[0]->process(input, outputs);
+//            m_encoders[0]->process(input, outputs);
             for(ulong i = 1; i < m_number_of_sources; i++)
             {
-                m_encoders[i]->processAdd(input++, outputs);
+                m_encoders[i]->processAdd(input[i], outputs);
+//                m_encoders[i]->processAdd(input++, outputs);
             }
         }
     };

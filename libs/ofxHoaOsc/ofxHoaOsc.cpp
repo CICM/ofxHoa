@@ -10,7 +10,7 @@
 using namespace hoa;
 
 ofxHoaOsc::ofxHoaOsc(){
-    
+    mySampleRate = 44100;
 }
 
 //SETUP
@@ -27,14 +27,9 @@ double ofxHoaOsc::phasor(double freq)
     
     phase = count*phaseStep;
     decimalPhase = phase -floor(phase);
-    
-//    if (decimalPhase < phaseStep) {
-//        count = 1;
-//    }
-//    else{
+
         count++;
-//    }
-//    cout << decimalPhase << endl;
+
     return (decimalPhase);
 }
 

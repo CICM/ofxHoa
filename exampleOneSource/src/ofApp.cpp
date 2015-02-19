@@ -40,10 +40,16 @@ void ofApp::setup(){
     
     // LINE USED TO SMOOTH RADIUS AND AZIMUTH VALUES
     line = new PolarLines<Hoa2d, float>(1);
+    line->setRamp(20);
+    smoothValues = new float[2];
+    smoothValues[0] = 0.0;
+    smoothValues[1] = 0.0;
     azimuth = 0;
     distanceFromCenter = 0;
     
     // FUNCTIONS TO SET THE ANGLE AND THE DISTANCE OF THE ENCODED SOUND SOURCE
+    line->setRadiusDirect(0, distanceFromCenter);
+    line->setAzimuthDirect(0, azimuth);
     hoaEncoder->setAzimuth(azimuth);
     hoaEncoder->setRadius(distanceFromCenter);
     
@@ -57,7 +63,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
+
 }
 
 //--------------------------------------------------------------
@@ -92,7 +98,8 @@ void ofApp::mouseMoved(int x, int y ){
     
     // SMOOTH VALUES USING hoa::PolarLines
     line->setRadius(0, ofMap(sourcePosition.distance(circleCenter),0.0,circleRadius, 0.0,1.0));
-    line->setAzimuth(0, atan2(currentPosition.y,currentPosition.x)+HOA_PI2);
+    line->setAzimuth(0, converter.azimuth(currentPosition.x, currentPosition.y));
+
 }
 
 //--------------------------------------------------------------
@@ -127,14 +134,17 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 void ofApp::audioOut( float * output, int bufferSize, int nChannels){
     
+    line->process(smoothValues);
+    
     for (int i = 0; i<bufferSize; i++) {
+
         
         // CREATE AUDIO INPUT
         inputBuffer[i] = myOsc.sine(330)*0.1;
         
-        // SET SMOOTHED CURRENT azimuth AND RADIUS
-        hoaEncoder->setAzimuth(line->getAzimuth(0));
-        hoaEncoder->setRadius(line->getRadius(0));
+        // SET SMOOTHED CURRENT RADIUS AND AZIMUTH
+        hoaEncoder->setRadius(smoothValues[0]);
+        hoaEncoder->setAzimuth(smoothValues[1]);
 
         // CREATE THE SPHERICAL HARMONICS
         hoaEncoder->process(&inputBuffer[i], harmonicsBuffer);

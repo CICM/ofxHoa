@@ -34,9 +34,7 @@ public:
     float *inputBuffer;
     float *harmonicsBuffer;
     float azimuth;
-    float oldAzimuth, newAzimuth;
     float distanceFromCenter;
-    float oldDistanceFromCenter, newDistanceFromCenter;
     
     int order;
     int nInputs, nOutputs;
@@ -48,8 +46,8 @@ public:
     ofPoint circleCenter;
     ofPoint sourcePosition;
     
-//private:
-    
+    Math<float> converter;
+    float * smoothValues;
     EncoderDC<Hoa2d, float> *hoaEncoder;
     
     Decoder<Hoa2d, float> *hoaDecoder;
