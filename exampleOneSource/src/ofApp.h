@@ -31,8 +31,8 @@ public:
     
     ofxHoaOsc myOsc;
     
-    float *inputBuffer;
-    float *harmonicsBuffer;
+    float * inputBuffer;
+    float * harmonicsBuffer;
     float azimuth;
     float distanceFromCenter;
     
@@ -51,7 +51,9 @@ public:
     EncoderDC<Hoa2d, float> *hoaEncoder;
     
     Decoder<Hoa2d, float> *hoaDecoder;
-    
+
     PolarLines<Hoa2d, float> * line;
+    
+    bool mutex;
     
 };

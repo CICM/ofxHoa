@@ -3,8 +3,10 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
+    soundStream.setDeviceID(5);
+//    ofSoundStreamListDevices();
     // CHOOSE NUMBER OF PARTICLES; EACH ONE WILL HAVE IT'S OWN COLOR AND FREQUENCY
-    numberOfParticles = 20;
+    numberOfParticles = 3;
     
     // CREATE VARIABLES OF THE CENTER CIRCLE
     circleCenter = ofVec2f(ofGetWidth()/2,ofGetHeight()/2);
@@ -13,7 +15,7 @@ void ofApp::setup(){
     circleMax = circleCenter + circleRadius;
     
     // CONFIGURE AUDIO
-    nOutputs = 2;
+    nOutputs = 16;
     nInputs = 0;
     sampleRate = 44100;
     bufferSize = 512;
@@ -31,6 +33,7 @@ void ofApp::setup(){
     inputBuffer = new float[numberOfParticles*bufferSize];
     harmonicsBuffer = new float[order*2+1];
     myOsc = new ofxHoaOsc[numberOfParticles];
+    
     encoderMulti = new EncoderMulti<Hoa2d, float>(order,numberOfParticles);
     decoder = new Decoder<Hoa2d, float>(order,nOutputs);
     line = new PolarLines<Hoa2d, float>(numberOfParticles);
@@ -159,7 +162,7 @@ void ofApp::audioOut(float *output, int bufferSize, int nChannels){
         
         // SET CURRENT RADIUS AND AZIMUTH FOR EACH PARTICLE
         for (int j = 0; j<numberOfParticles; j++) {
-            inputBuffer[j] = myOsc[j].sine(frequencies[j])/numberOfParticles;
+            inputBuffer[j] = (myOsc[j].triangle(frequencies[j])/numberOfParticles)*0.1;
             encoderMulti->setRadius(j, lineValues[j]);
             encoderMulti->setAzimuth(j, lineValues[j+numberOfParticles]);
         }
@@ -175,4 +178,16 @@ void  ofApp::exit(){
     
     // CLEAR AUDIO WHEN CLOSING
     soundStream.close();
+    
+    delete [] position;
+    delete [] velocity;
+    delete [] noise;
+    delete [] lineValues;
+    delete [] frequencies;
+    delete [] inputBuffer;
+    delete [] harmonicsBuffer;
+    delete [] myOsc;
+    delete [] encoderMulti;
+    delete [] decoder;
+    delete [] line;
 }

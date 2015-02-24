@@ -54,10 +54,8 @@ double ofxHoaOsc::square(double freq)
 // SIGNAL TRIANGULAIRE
 double ofxHoaOsc::triangle(double freq)
 {
-    if (phasor(freq) < 0.5)
-        return (2.0*phasor(freq));
-    else
-        return (2.0 - 2.0*phasor(freq));
+    return   1-fabs(phasor(freq)-0.5)*4;
+
 }
 
 // SIGNAL SINUS
