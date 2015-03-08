@@ -7,9 +7,9 @@ void ofApp::setup(){
 //    ofSoundStreamListDevices();
     
     // USE THIS FUNCTION TO SET THE AUDIO DEVICE
-    soundStream.setDeviceID(5);
+    soundStream.setDeviceID(2);
     
-    nOutputs = 8;
+    nOutputs = 2;
     nInputs = 0;
     sampleRate = 44100;
     bufferSize = 512;
@@ -40,7 +40,7 @@ void ofApp::setup(){
     
     // LINE USED TO SMOOTH RADIUS AND AZIMUTH VALUES
     line = new PolarLines<Hoa2d, float>(1);
-    line->setRamp(44100/100);
+    line->setRamp(44100/50);
     smoothValues = new float[2];
     smoothValues[0] = 0.0;
     smoothValues[1] = 0.0;
@@ -72,6 +72,7 @@ void ofApp::draw(){
     ofBackground(0);
     ofSetColor(255);
     ofCircle(circleCenter,circleRadius);
+    
     ofSetColor(255,0,0);
     ofCircle(sourcePosition, 10);
 
@@ -98,11 +99,15 @@ void ofApp::mouseMoved(int x, int y ){
     
     // SMOOTH VALUES USING hoa::PolarLines
     
-    if (!mutex) {
+
+    if (myMutex.tryLock()) {
         
         line->setRadius(0, ofMap(sourcePosition.distance(circleCenter),0.0,circleRadius, 0.0,1.0));
         line->setAzimuth(0, converter.azimuth(currentPosition.x, currentPosition.y));
+        
+        myMutex.unlock();
     }
+
 //    cout << sourcePosition.distance(circleCenter) << " " << line->getRadius(0) << endl;
 }
 
@@ -139,14 +144,14 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::audioOut( float * output, int bufferSize, int nChannels){
 //    cout << "process in" << endl;
 
-    mutex = true;
+    if (myMutex.tryLock()) {
 
     for (int i = 0; i<bufferSize; i++) {
 
         line->process(smoothValues);
         // CREATE AUDIO INPUT
-        inputBuffer[i] = myOsc.triangle(330)*0.01;
-        
+//        inputBuffer[i] = myOsc.triangle(330)*0.01;
+        inputBuffer[i] = myOsc.triangle(330)*0.3;
         // SET SMOOTHED CURRENT RADIUS AND AZIMUTH
         hoaEncoder->setRadius(smoothValues[0]);
         hoaEncoder->setAzimuth(smoothValues[1]);
@@ -157,20 +162,26 @@ void ofApp::audioOut( float * output, int bufferSize, int nChannels){
         // DECODE THE HARMONICS; AUDIO TREATEMENTS ARE POSSIBLE IN BETWEEN THESE STEPS
         hoaDecoder->process(harmonicsBuffer, &output[i*nChannels]);
 
+        }
+        
+    myMutex.unlock();
+        
     }
+
 //    cout << "process out" << endl;
-    mutex = false;
+
 }
 
 void ofApp::exit(){
     
-    soundStream.stop();
     soundStream.close();
     
+//    delete [] hoaEncoder;
+//    delete [] hoaDecoder;
+//    delete [] line;
     delete [] inputBuffer;
     delete [] harmonicsBuffer;
-    delete [] hoaEncoder;
-    delete [] hoaDecoder;
-    delete [] line;
     delete [] smoothValues;
+    
+
 }

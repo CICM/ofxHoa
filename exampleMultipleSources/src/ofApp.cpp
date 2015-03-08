@@ -3,10 +3,10 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    soundStream.setDeviceID(5);
+    soundStream.setDeviceID(2);
 //    ofSoundStreamListDevices();
     // CHOOSE NUMBER OF PARTICLES; EACH ONE WILL HAVE IT'S OWN COLOR AND FREQUENCY
-    numberOfParticles = 3;
+    numberOfParticles = 10;
     
     // CREATE VARIABLES OF THE CENTER CIRCLE
     circleCenter = ofVec2f(ofGetWidth()/2,ofGetHeight()/2);
@@ -15,7 +15,7 @@ void ofApp::setup(){
     circleMax = circleCenter + circleRadius;
     
     // CONFIGURE AUDIO
-    nOutputs = 16;
+    nOutputs = 2;
     nInputs = 0;
     sampleRate = 44100;
     bufferSize = 512;
@@ -187,7 +187,7 @@ void  ofApp::exit(){
     delete [] inputBuffer;
     delete [] harmonicsBuffer;
     delete [] myOsc;
-    delete [] encoderMulti;
-    delete [] decoder;
-    delete [] line;
+//    delete [] encoderMulti;
+//    delete [] decoder;
+//    delete [] line;
 }

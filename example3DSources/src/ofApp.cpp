@@ -4,7 +4,7 @@
 void ofApp::setup(){
     
     ofSetVerticalSync(true);
-    
+    soundStream.setDeviceID(2);
     nOutputs = 2;
     nInputs = 0;
     sampleRate = 44100;
@@ -42,6 +42,7 @@ void ofApp::setup(){
 //    line = new PolarLines<Hoa3d, float>(numberOfSources);
     
     cam.setPosition(ofGetWidth()/2, ofGetHeight()/2, 1000);
+    cam.setVFlip(true);
     cam.lookAt(ofVec3f(ofGetWidth()/2,ofGetHeight()/2,0));
 
     light.setDiffuseColor(ofColor(255));
@@ -154,9 +155,9 @@ void ofApp::exit(){
     delete [] harmonic;
     delete [] input;
     delete [] lineValue;
-    delete [] line;
-    delete [] encoder;
-    delete [] decoder;
+//    delete [] line;
+//    delete [] encoder;
+//    delete [] decoder;
     sphere.clear();
     position.clear();
     velocity.clear();

@@ -47,13 +47,16 @@ public:
     ofPoint sourcePosition;
     
     Math<float> converter;
-    float * smoothValues;
-    EncoderDC<Hoa2d, float> *hoaEncoder;
     
-    Decoder<Hoa2d, float> *hoaDecoder;
+    float * smoothValues;
+    
+    EncoderDC<Hoa2d, float> * hoaEncoder;
+    
+    Decoder<Hoa2d, float> * hoaDecoder;
 
     PolarLines<Hoa2d, float> * line;
     
+    ofMutex myMutex;
     bool mutex;
     
 };
