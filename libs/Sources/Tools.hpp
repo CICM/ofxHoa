@@ -63,7 +63,8 @@ namespace hoa
         
         inline T process() 
         {
-            if(m_counter < m_ramp)
+//            if(m_counter < m_ramp)
+            if(m_counter++ < m_ramp)
             {
                 m_value_old += m_value_step;
             }
