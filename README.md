@@ -1,7 +1,22 @@
 ofxHoa
 ================
 
-ofxHoa is an openFrameworks-compatible version of the Higher Order Ambisonics (Hoa) Library. As the original library was written in c++11, ofxHoa contains a slightly modified version. Full compatibility will be provided once openFrameworks supports c++11.
+ofxHoa is a wrapper of the High Order Ambisonics (Hoa) Library. It’s a versatile
+tool for sound spacialization in 2D and 3D that includes not only ambisonic models, but also binaural and plane wave ones.
+
+## IMPORTANT INSTALLATION NOTES
+
+The ofxHoa uses a git submodule. If you choose download it directly through the site,
+the submodule may not be included.
+Please check that you have the folder 
+
+ofxHoa/libs/HoaLibrary-Light
+
+and all of it’s contents. If not, download the HoaLibrary-Light in the following link:
+
+https://github.com/CICM/HoaLibrary-Light
+
+and put the /Sources folder inside ofxHoa/libs/HoaLibrary-Light
 
 ## Hoa Library 
 
