@@ -7,7 +7,7 @@ void ofApp::setup(){
 //    ofSoundStreamListDevices();
     
     // USE THIS FUNCTION TO SET THE AUDIO DEVICE
-    soundStream.setDeviceID(2);
+//    soundStream.setDeviceID(2);
     
     nOutputs = 2;
     nInputs = 0;
@@ -35,9 +35,12 @@ void ofApp::setup(){
     hoaEncoder = new EncoderDC<Hoa2d, float>(order);
     
     // THE DECODER TRANSLATES THE HARMONICS INTO AUDIO SIGNALS FOR OUTPUT
-    // NUMBER OF MINIMUM OUPUT CHANNELS  = ORDER*2+1
-    hoaDecoder = new Decoder<Hoa2d, float>(order, nOutputs);
+    // NUMBER OF MINIMUM OUPUT CHANNELS FOR REGULAR MODE  = ORDER*2+1
+//    hoaDecoder = new Decoder<Hoa2d, float>::Regular(order, nOutputs);
     
+    // HERE THE DECODER IS SET TO BINAURAL MODE
+    hoaDecoder = new Decoder<Hoa2d, float>::Binaural(order);
+    hoaDecoder->computeMatrix(bufferSize);
     // LINE USED TO SMOOTH RADIUS AND AZIMUTH VALUES
     line = new PolarLines<Hoa2d, float>(1);
     line->setRamp(44100/50);
@@ -63,7 +66,8 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    // CHANGE SOURCE POSITION
+    sourcePosition = ofVec3f(mouseX, mouseY);
 }
 
 //--------------------------------------------------------------
@@ -92,23 +96,6 @@ void ofApp::keyReleased(int key){
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
 
-    // CALCULATE AND SET SOURCE POSITION IN RELATION TO THE CENTER
-    ofPoint currentPosition;
-    sourcePosition = ofPoint(x,y);
-    currentPosition = sourcePosition-circleCenter;
-    
-    // SMOOTH VALUES USING hoa::PolarLines
-    
-
-    if (myMutex.tryLock()) {
-        
-        line->setRadius(0, ofMap(sourcePosition.distance(circleCenter),0.0,circleRadius, 0.0,1.0));
-        line->setAzimuth(0, converter.azimuth(currentPosition.x, currentPosition.y));
-        
-        myMutex.unlock();
-    }
-
-//    cout << sourcePosition.distance(circleCenter) << " " << line->getRadius(0) << endl;
 }
 
 //--------------------------------------------------------------
@@ -142,10 +129,16 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 }
 
 void ofApp::audioOut( float * output, int bufferSize, int nChannels){
-//    cout << "process in" << endl;
-
-    if (myMutex.tryLock()) {
-
+    
+    // CALCULATE SOURCE POSITION IN RELATION TO THE CENTER
+        ofPoint currentPosition;
+        sourcePosition = ofPoint(mouseX,mouseY);
+        currentPosition = sourcePosition-circleCenter;
+    
+    // SMOOTH VALUES USING hoa::PolarLines
+    line->setRadius(0, ofMap(sourcePosition.distance(circleCenter),0.0,circleRadius, 0.0,1.0));
+    line->setAzimuth(0, Math<float>::azimuth(currentPosition.x, currentPosition.y));
+    
     for (int i = 0; i<bufferSize; i++) {
 
         line->process(smoothValues);
@@ -161,15 +154,7 @@ void ofApp::audioOut( float * output, int bufferSize, int nChannels){
         
         // DECODE THE HARMONICS; AUDIO TREATEMENTS ARE POSSIBLE IN BETWEEN THESE STEPS
         hoaDecoder->process(harmonicsBuffer, &output[i*nChannels]);
-
         }
-        
-    myMutex.unlock();
-        
-    }
-
-//    cout << "process out" << endl;
-
 }
 
 void ofApp::exit(){
@@ -179,9 +164,9 @@ void ofApp::exit(){
 //    delete [] hoaEncoder;
 //    delete [] hoaDecoder;
 //    delete [] line;
-    delete [] inputBuffer;
-    delete [] harmonicsBuffer;
-    delete [] smoothValues;
-    
+//    delete [] inputBuffer;
+//    delete [] harmonicsBuffer;
+//    delete [] smoothValues;
+//    
 
 }

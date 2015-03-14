@@ -46,7 +46,6 @@ public:
     ofPoint circleCenter;
     ofPoint sourcePosition;
     
-    Math<float> converter;
     
     float * smoothValues;
     
@@ -54,6 +53,8 @@ public:
     
     Decoder<Hoa2d, float> * hoaDecoder;
 
+    
+    
     PolarLines<Hoa2d, float> * line;
     
     ofMutex myMutex;

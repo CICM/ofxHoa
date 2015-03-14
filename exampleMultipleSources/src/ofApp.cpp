@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    soundStream.setDeviceID(2);
+//    soundStream.setDeviceID(2);
 //    ofSoundStreamListDevices();
     // CHOOSE NUMBER OF PARTICLES; EACH ONE WILL HAVE IT'S OWN COLOR AND FREQUENCY
     numberOfParticles = 10;
@@ -35,7 +35,10 @@ void ofApp::setup(){
     myOsc = new ofxHoaOsc[numberOfParticles];
     
     encoderMulti = new EncoderMulti<Hoa2d, float>(order,numberOfParticles);
-    decoder = new Decoder<Hoa2d, float>(order,nOutputs);
+    decoder = new Decoder<Hoa2d, float>::Binaural(order);
+    //    decoder = new Decoder<Hoa2d, float>::Regular(order,nOutputs);
+    decoder->computeMatrix(bufferSize);
+    
     line = new PolarLines<Hoa2d, float>(numberOfParticles);
     
     // SET THE RAMP FOR SMOOTHING THE VALUES
@@ -59,14 +62,12 @@ void ofApp::setup(){
         mesh.addVertex(position[i]);
         mesh.addColor(ofFloatColor(abs(ofRandomf()),abs(ofRandomf()),abs(ofRandomf())));
         line->setRadiusDirect(i, ofMap(position[i].distance(circleCenter), 0.0, circleMax.x, 0.0, 10.0));
-        line->setAzimuthDirect(i, converter.azimuth(position[i].x, position[i].y));
+        line->setAzimuthDirect(i, Math<float>::azimuth(position[i].x, position[i].y));
         lineValues[i] = line->getRadius(i);
         lineValues[i+numberOfParticles] = line->getAzimuth(i);
     }
 
     soundStream.setup(this, nOutputs, nInputs, sampleRate, bufferSize, nBuffers);
-    
-
     
 }
 
@@ -90,7 +91,8 @@ void ofApp::update(){
         
         // SET RADIUS AND AZIMUTH IN RELATION TO NEW POSITION
         line->setRadius(i, ofMap(position[i].distance(circleCenter), 0.0, circleMax.x, 0.0, 10.0));
-        line->setAzimuth(i, converter.azimuth(position[i].x, position[i].y));
+        line->setAzimuth(i, Math<float>::azimuth(position[i].x-circleCenter.x,
+                                                 position[i].y-circleCenter.y));
         
     }
 
@@ -153,7 +155,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 //--------------------------------------------------------------
 void ofApp::audioOut(float *output, int bufferSize, int nChannels){
-    
+
     // SMOOTH VALUES
     line->process(lineValues);
     
@@ -162,7 +164,7 @@ void ofApp::audioOut(float *output, int bufferSize, int nChannels){
         
         // SET CURRENT RADIUS AND AZIMUTH FOR EACH PARTICLE
         for (int j = 0; j<numberOfParticles; j++) {
-            inputBuffer[j] = (myOsc[j].triangle(frequencies[j])/numberOfParticles)*0.1;
+            inputBuffer[j] = (myOsc[j].triangle(frequencies[j])/numberOfParticles)*0.5;
             encoderMulti->setRadius(j, lineValues[j]);
             encoderMulti->setAzimuth(j, lineValues[j+numberOfParticles]);
         }

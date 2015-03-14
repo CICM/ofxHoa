@@ -10,7 +10,7 @@
 #define __exampleOneSource__ofxHoaOsc__
 
 #include <stdio.h>
-#include "../Sources/Defs.hpp"
+#include "../HoaLibrary-light/Sources/Defs.hpp"
 
 namespace hoa {
     

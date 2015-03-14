@@ -39,7 +39,7 @@ class ofApp : public ofBaseApp{
     PolarLines<Hoa2d, float> * line;
     
     ofxHoaOsc * myOsc;
-    Math<float> converter;
+
     float * inputBuffer;
     float * harmonicsBuffer;
     float * frequencies;
