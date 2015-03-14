@@ -25,7 +25,7 @@
 
 
 //THIS FILE WAS INCLUDED TO ALLOW TESTS IN OFXHOA WITHOUT OTHER ADDONS
-#include "../libs/ofxHoaOsc/ofxHoaOsc.h"
+#include "/ofxHoaOsc/ofxHoaOsc.h"
 
 #endif
 
