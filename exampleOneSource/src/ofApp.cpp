@@ -6,8 +6,10 @@ void ofApp::setup(){
     //    UNCOMMENT THIS LINE TO PRINT AVALIABLE AUDIO DEVICES
 //    ofSoundStreamListDevices();
     
-    // USE THIS FUNCTION TO SET THE AUDIO DEVICE
-//    soundStream.setDeviceID(2);
+    // USE THIS FUNCTION TO SET THE AUDIO DEVICE IF NECESSARY
+//    soundStream.setDeviceID(0);
+
+    //ASSIGN AUDIO PARAMETERS
     
     nOutputs = 2;
     nInputs = 0;
@@ -15,35 +17,33 @@ void ofApp::setup(){
     bufferSize = 512;
     nBuffers = (nInputs+nOutputs)*2;
     
-    //INITIALIZE SOUNDSTREAM
-    soundStream.setup(this, nOutputs, nInputs, sampleRate, bufferSize, nBuffers);
-    
     // CREATE BUFFER FOR SOUND INPUT
     inputBuffer = new float[bufferSize];
-    for (int i = 0; i<bufferSize; i++) {
-        inputBuffer[i] = 0;
-    }
     
     // SETUP TEST OSCILATOR
     myOsc.setup(sampleRate);
     
     // SETUP HOA
     order = 3;
+    //CREATE THE SPHERICAL HARMONICS BUFFER, IT MUST HAVE ORDER*2+1 VALUES FOR 2 DIMENSIONS
     harmonicsBuffer = new float[order*2+1];
     
-    // THE ENCODER CREATES THE SPHERICAL HARMONICS
+    // THE ENCODER CALCULATES THE SPHERICAL HARMONICS
     hoaEncoder = new EncoderDC<Hoa2d, float>(order);
     
-    // THE DECODER TRANSLATES THE HARMONICS INTO AUDIO SIGNALS FOR OUTPUT
-    // NUMBER OF MINIMUM OUPUT CHANNELS FOR REGULAR MODE  = ORDER*2+1
-//    hoaDecoder = new Decoder<Hoa2d, float>::Regular(order, nOutputs);
+    /* THE DECODER TRANSLATES THE HARMONICS INTO AUDIO SIGNALS FOR OUTPUT
+     NUMBER OF MINIMUM OUPUT CHANNELS FOR REGULAR MODE = ORDER*2+1
+     SMALLER VALUES MAY BE USED, BUT THE RESULTING SOUND WON'T BE AS EXPECTED 
+     FOR SMALL DIFFERENCES ( 5 OR 6 INSTEAD OF 7 SPEAKERS) IRREGULAR MODE MAY BE USED */
+
+//        hoaDecoder = new Decoder<Hoa2d, float>::Regular(order, nOutputs);
     
-    // HERE THE DECODER IS SET TO BINAURAL MODE
+    // BINAURAL MODE SET FOR USE WITH HEADPHONES
     hoaDecoder = new Decoder<Hoa2d, float>::Binaural(order);
     hoaDecoder->computeMatrix(bufferSize);
     // LINE USED TO SMOOTH RADIUS AND AZIMUTH VALUES
     line = new PolarLines<Hoa2d, float>(1);
-    line->setRamp(44100/50);
+    line->setRamp(round(50 * sampleRate/1000.0));
     smoothValues = new float[2];
     smoothValues[0] = 0.0;
     smoothValues[1] = 0.0;
@@ -51,17 +51,19 @@ void ofApp::setup(){
     distanceFromCenter = 0;
     
     // FUNCTIONS TO SET THE ANGLE AND THE DISTANCE OF THE ENCODED SOUND SOURCE
-    line->setRadiusDirect(0, distanceFromCenter);
+    line->setRadiusDirect(0, 10000.);
     line->setAzimuthDirect(0, azimuth);
     hoaEncoder->setAzimuth(azimuth);
-    hoaEncoder->setRadius(distanceFromCenter);
+    hoaEncoder->setRadius(100000.);
     
     
-    circleCenter = ofPoint(ofGetWidth()/2,ofGetHeight()/2);
+    circleCenter = ofVec3f(ofGetWidth()/2,ofGetHeight()/2);
     circleRadius = ofGetWidth()/4;
     
     sourcePosition = circleCenter;
     
+    //INITIALIZE SOUNDSTREAM
+    soundStream.setup(this, nOutputs, nInputs, sampleRate, bufferSize, nBuffers);
 }
 
 //--------------------------------------------------------------
@@ -73,13 +75,9 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     
-    ofBackground(0);
-    ofSetColor(255);
-    ofCircle(circleCenter,circleRadius);
-    
+    ofBackgroundGradient(ofColor::gold, ofColor::black);
     ofSetColor(255,0,0);
     ofCircle(sourcePosition, 10);
-
     
 }
 
@@ -131,42 +129,41 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::audioOut( float * output, int bufferSize, int nChannels){
     
     // CALCULATE SOURCE POSITION IN RELATION TO THE CENTER
-        ofPoint currentPosition;
-        sourcePosition = ofPoint(mouseX,mouseY);
-        currentPosition = sourcePosition-circleCenter;
+    currentPosition = ofVec3f(mouseX,mouseY)-circleCenter;
     
-    // SMOOTH VALUES USING hoa::PolarLines
-    line->setRadius(0, ofMap(sourcePosition.distance(circleCenter),0.0,circleRadius, 0.0,1.0));
+    // SET NEW RADIUS AND ANGLE USING HOA MATH CLASS
+//    line->setRadius(0, ofMap(sourcePosition.distance(circleCenter),0.0,circleRadius, 0.0,1.0));
+    line->setRadius(0, Math<float>::radius(currentPosition.x, currentPosition.y)*0.05);
+//    cout << Math<float>::radius(currentPosition.x, currentPosition.y)*0.01 <<endl;
     line->setAzimuth(0, Math<float>::azimuth(currentPosition.x, currentPosition.y));
     
     for (int i = 0; i<bufferSize; i++) {
-
+        // CALCULATE SMOOTHED VALUES AND PUT THEM INTO THE ARRAY
         line->process(smoothValues);
+
         // CREATE AUDIO INPUT
-//        inputBuffer[i] = myOsc.triangle(330)*0.01;
         inputBuffer[i] = myOsc.triangle(330)*0.3;
+        
         // SET SMOOTHED CURRENT RADIUS AND AZIMUTH
         hoaEncoder->setRadius(smoothValues[0]);
         hoaEncoder->setAzimuth(smoothValues[1]);
 
         // CREATE THE SPHERICAL HARMONICS
-        hoaEncoder->process(&inputBuffer[i], harmonicsBuffer);
-        
+        hoaEncoder->process(inputBuffer+i, harmonicsBuffer);
+
         // DECODE THE HARMONICS; AUDIO TREATEMENTS ARE POSSIBLE IN BETWEEN THESE STEPS
-        hoaDecoder->process(harmonicsBuffer, &output[i*nChannels]);
+        hoaDecoder->process(harmonicsBuffer, output+i*nChannels);
         }
 }
 
 void ofApp::exit(){
-    
+    //CLOSE SOUND STREAM AND THEN DESTROY ALL OBJECTS CREATED TO AVOID MEMORY LEAKS
     soundStream.close();
     
-//    delete [] hoaEncoder;
-//    delete [] hoaDecoder;
-//    delete [] line;
-//    delete [] inputBuffer;
-//    delete [] harmonicsBuffer;
-//    delete [] smoothValues;
-//    
-
+    delete hoaEncoder;
+    delete hoaDecoder;
+    delete line;
+    delete [] inputBuffer;
+    delete [] harmonicsBuffer;
+    delete [] smoothValues;
 }

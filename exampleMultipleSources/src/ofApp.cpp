@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    
+
 //    soundStream.setDeviceID(2);
 //    ofSoundStreamListDevices();
     // CHOOSE NUMBER OF PARTICLES; EACH ONE WILL HAVE IT'S OWN COLOR AND FREQUENCY
@@ -34,15 +34,19 @@ void ofApp::setup(){
     harmonicsBuffer = new float[order*2+1];
     myOsc = new ofxHoaOsc[numberOfParticles];
     
+    // THE ENCODERMULTI ALLOWS TO DISTRIBUTE MULTIPLE SOURCES IN SPACE
     encoderMulti = new EncoderMulti<Hoa2d, float>(order,numberOfParticles);
-    decoder = new Decoder<Hoa2d, float>::Binaural(order);
-    //    decoder = new Decoder<Hoa2d, float>::Regular(order,nOutputs);
+
+    // CHOSE DECODER TYPE
+//    decoder = new Decoder<Hoa2d, float>::Binaural(order);
+        decoder = new Decoder<Hoa2d, float>::Regular(order,nOutputs);
+    // COMPUE MATRIX OF SPEAKERS
     decoder->computeMatrix(bufferSize);
     
     line = new PolarLines<Hoa2d, float>(numberOfParticles);
     
     // SET THE RAMP FOR SMOOTHING THE VALUES
-    line->setRamp(25);
+    line->setRamp(sampleRate/100);
 
     // SETUP MESH
     mesh.setMode(OF_PRIMITIVE_POINTS);
@@ -61,8 +65,10 @@ void ofApp::setup(){
         noise[i] = ofVec2f(ofRandom(10000),ofRandom(10000));
         mesh.addVertex(position[i]);
         mesh.addColor(ofFloatColor(abs(ofRandomf()),abs(ofRandomf()),abs(ofRandomf())));
+        
         line->setRadiusDirect(i, ofMap(position[i].distance(circleCenter), 0.0, circleMax.x, 0.0, 10.0));
         line->setAzimuthDirect(i, Math<float>::azimuth(position[i].x, position[i].y));
+        
         lineValues[i] = line->getRadius(i);
         lineValues[i+numberOfParticles] = line->getAzimuth(i);
     }
@@ -102,8 +108,8 @@ void ofApp::update(){
 void ofApp::draw(){
     
     // DRAW EVERYTHING
-    ofBackground(0);
-    ofCircle(circleCenter, circleRadius);
+    ofBackgroundGradient(ofColor::gold, ofColor::black);
+//    ofCircle(circleCenter, circleRadius);
     mesh.draw();
 
 }
@@ -156,29 +162,31 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 //--------------------------------------------------------------
 void ofApp::audioOut(float *output, int bufferSize, int nChannels){
 
-    // SMOOTH VALUES
-    line->process(lineValues);
-    
     // BEGIN AUDIO LOOP
     for (int i = 0; i<bufferSize; i++) {
+
+    // SMOOTH VALUES
+    line->process(lineValues);
         
         // SET CURRENT RADIUS AND AZIMUTH FOR EACH PARTICLE
         for (int j = 0; j<numberOfParticles; j++) {
             inputBuffer[j] = (myOsc[j].triangle(frequencies[j])/numberOfParticles)*0.5;
+
             encoderMulti->setRadius(j, lineValues[j]);
             encoderMulti->setAzimuth(j, lineValues[j+numberOfParticles]);
         }
 
         // PROCESS ONE SAMPLE OF EACH PARTICLE AND OUTPUT THE CORRESPONDING AUDIO
         encoderMulti->process(inputBuffer,harmonicsBuffer);
-        decoder->process(harmonicsBuffer, &output[i*nChannels]);
+        decoder->process(harmonicsBuffer, output+i*nChannels);
+
     }
 }
 
 //--------------------------------------------------------------
 void  ofApp::exit(){
     
-    // CLEAR AUDIO WHEN CLOSING
+    // CLEAR AUDIO AND DELETE OBJECTS WHEN CLOSING
     soundStream.close();
     
     delete [] position;
@@ -189,7 +197,8 @@ void  ofApp::exit(){
     delete [] inputBuffer;
     delete [] harmonicsBuffer;
     delete [] myOsc;
-//    delete [] encoderMulti;
-//    delete [] decoder;
-//    delete [] line;
+    
+    delete encoderMulti;
+    delete decoder;
+    delete line;
 }

@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxHoa.h"
 
+// DON'T FORGET TO USE THE NAMESPACE HOA
 using namespace hoa;
 
 class ofApp : public ofBaseApp{
@@ -27,12 +28,18 @@ public:
     void audioOut(float * output, int bufferSize, int nChannels);
     void exit();
     
-    ofSoundStream soundStream;
-    
     ofxHoaOsc myOsc;
+    
+    //MOST HOA CLASSES REQUIRE ARGUMENTS FOR INITILIZATION, SO WE CREATE THEM AS POINTERS
+    EncoderDC<Hoa2d, float> * hoaEncoder;
+    Decoder<Hoa2d, float> * hoaDecoder;
+    PolarLines<Hoa2d, float> * line;
+    
+    ofSoundStream soundStream;
     
     float * inputBuffer;
     float * harmonicsBuffer;
+    float * smoothValues;
     float azimuth;
     float distanceFromCenter;
     
@@ -43,21 +50,7 @@ public:
     int nBuffers;
     
     int circleRadius;
-    ofPoint circleCenter;
-    ofPoint sourcePosition;
-    
-    
-    float * smoothValues;
-    
-    EncoderDC<Hoa2d, float> * hoaEncoder;
-    
-    Decoder<Hoa2d, float> * hoaDecoder;
-
-    
-    
-    PolarLines<Hoa2d, float> * line;
-    
-    ofMutex myMutex;
-    bool mutex;
-    
+    ofVec3f circleCenter;
+    ofVec3f sourcePosition;
+    ofVec3f currentPosition;
 };

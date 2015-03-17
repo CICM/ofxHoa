@@ -17,7 +17,7 @@ namespace hoa {
 class ofxHoaOsc {
     
 private:
-    
+    double ramp, oldValue, newValue;
     double freq;//fréquence du signal carré//
 
     double phase;
@@ -43,6 +43,7 @@ public:
     double square(double freq);
     double triangle(double freq);
     double sawtooth(double freq);
+    double envelope();
     
 };
 }

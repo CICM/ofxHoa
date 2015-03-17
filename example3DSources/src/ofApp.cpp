@@ -3,15 +3,16 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    ofSetVerticalSync(true);
-    soundStream.setDeviceID(2);
+    // INITIALIZE AUDIO VARIABLES
+//    soundStream.setDeviceID(2);
     nOutputs = 2;
     nInputs = 0;
     sampleRate = 44100;
     bufferSize = 512;
     nBuffers = (nOutputs+nInputs)*2;
     
-    numberOfSources = 5;
+    // CHOOSE NUMBER OF SOURCES AND SET POSITION OF CENTRAL SPHERE
+    numberOfSources = 8;
     centralSphereRadius = 100;
     centralSpherePosition = ofVec3f(ofGetWidth()/2, ofGetHeight()/2, 0);
     centralSphere = ofSpherePrimitive(centralSphereRadius, 50);
@@ -19,6 +20,7 @@ void ofApp::setup(){
     
     velMax = 10;
     
+    // CREATE PARTICLES AND ASSOCIATED OSCILLATOR
     for (int i = 0; i<numberOfSources; i++) {
         
         sphere.push_back(ofSpherePrimitive(30,50));
@@ -31,23 +33,34 @@ void ofApp::setup(){
         
     }
     
-    hoaOrder = 7;
+    /*INITIALIZE HOA VARIBLES. NOTE THAT FOR 3D SPACIALIZATION, THE NUMBER OF REQUIRED
+    LOUDSPEAKERS EQUALS (ORDER+1)^2 AND LINE STORES 3 VALUES PER SOURCE */
+    hoaOrder = 2;
     
-    harmonic = new float[hoaOrder*2+1];
+    harmonic = new float[(hoaOrder+1)*(hoaOrder+1)];
     input = new float[numberOfSources];
-    lineValue = new float[numberOfSources*2];
+    lineValue = new float[numberOfSources*3];
     
-//    encoder = new EncoderMulti<Hoa3d, float>(hoaOrder, numberOfSources);
-//    decoder = new Decoder<Hoa3d, float>(hoaOrder, nOutputs);
-//    line = new PolarLines<Hoa3d, float>(numberOfSources);
+    encoder = new EncoderMulti<Hoa3d, float>(hoaOrder, numberOfSources);
     
+    // CHOOSE DECODER
+//    decoder = new Decoder<Hoa3d, float>::Regular(hoaOrder, nOutputs);
+    decoder = new Decoder<Hoa3d, float>::Binaural(hoaOrder);
+    decoder->computeMatrix(bufferSize);
+    line = new PolarLines<Hoa3d, float>(numberOfSources);
+    line->setRamp(44100/50);
+    
+    // SET CAM POSITION
     cam.setPosition(ofGetWidth()/2, ofGetHeight()/2, 1000);
     cam.setVFlip(true);
     cam.lookAt(ofVec3f(ofGetWidth()/2,ofGetHeight()/2,0));
 
+    // SET LIGHT
     light.setDiffuseColor(ofColor(255));
     light.setPosition(0,0,10);
     light.lookAt(ofVec3f(ofGetWidth()/2, ofGetHeight(), 0));
+    
+    // INITIALIZE AUDIO
     soundStream.setup(this, nOutputs, nInputs, sampleRate, bufferSize, nBuffers);
 }
 
@@ -57,7 +70,14 @@ void ofApp::update(){
         seed[i]+=0.01;
         position[i]+=ofNoise(seed[i].x,seed[i].y,seed[i].z)*velocity[i];
         sphere[i].setPosition(position[i]);
-    
+        
+        ofVec3f relativePosition = position[i] - centralSpherePosition;
+        
+        line->setAzimuth(i, Math<float>::azimuth(relativePosition.x, relativePosition.y));
+        line->setElevation(i, Math<float>::elevation(relativePosition.x, relativePosition.y));
+        line->setRadius(i, Math<float>::radius(relativePosition.x, relativePosition.y)*0.01);
+        
+        
         if (position[i].distance(centralSpherePosition)<centralSphereRadius+30) {
             velocity[i]*= -1;
         }
@@ -145,19 +165,35 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 //--------------------------------------------------------------
 void ofApp::audioOut(float * output, int bufferSize, int nChannels){
-    
+   
+    for (int i = 0; i<bufferSize; i++) {
+        line->process(lineValue);
+        
+        for (int j = 0; j<numberOfSources; j++) {
+            input[j] = oscillator[j].triangle(frequency[j])/numberOfSources *0.4;
+            encoder->setRadius(j, lineValue[j]);
+            encoder->setAzimuth(j, lineValue[j+numberOfSources]);
+            encoder->setElevation(j, lineValue[j+numberOfSources*2]);
+        }
+        encoder->process(input, harmonic);
+        decoder->process(harmonic, output+i*nChannels);
+    }
 }
 
 //--------------------------------------------------------------
 
 void ofApp::exit(){
     
+    // CLOSE AUDIO AND CLEAR OBJECTS WHEN CLOSING
+    
+    soundStream.close();
+    
     delete [] harmonic;
     delete [] input;
     delete [] lineValue;
-//    delete [] line;
-//    delete [] encoder;
-//    delete [] decoder;
+    delete line;
+    delete encoder;
+    delete decoder;
     sphere.clear();
     position.clear();
     velocity.clear();

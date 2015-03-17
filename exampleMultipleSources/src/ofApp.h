@@ -1,3 +1,5 @@
+// FOR A MORE COMMENTED EXAMPLE SEE exampleOneSource
+
 #pragma once
 
 #include "ofMain.h"
@@ -24,22 +26,13 @@ class ofApp : public ofBaseApp{
     
     void audioOut(float * output, int bufferSize, int nChannels);
     void exit();
-		
-    ofMesh mesh;
-    ofVec2f * position;
-    ofVec2f * velocity;
-    ofVec2f * noise;
-    ofVec2f circleCenter;
-    ofVec2f circleMin, circleMax;
-    float circleRadius;
-    float velocityMax;
-    
+	
     EncoderMulti<Hoa2d, float> * encoderMulti;
     Decoder<Hoa2d, float> * decoder;
     PolarLines<Hoa2d, float> * line;
     
     ofxHoaOsc * myOsc;
-
+    
     float * inputBuffer;
     float * harmonicsBuffer;
     float * frequencies;
@@ -51,5 +44,12 @@ class ofApp : public ofBaseApp{
     int numberOfParticles;
     int order;
     
-    
+    ofMesh mesh;
+    ofVec2f * position;
+    ofVec2f * velocity;
+    ofVec2f * noise;
+    ofVec2f circleCenter;
+    ofVec2f circleMin, circleMax;
+    float circleRadius;
+    float velocityMax;
 };
