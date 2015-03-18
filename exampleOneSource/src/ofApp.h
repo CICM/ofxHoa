@@ -52,5 +52,5 @@ public:
     float circleRadius;
     ofVec3f circleCenter;
     ofVec3f sourcePosition;
-    ofVec3f currentPosition;
+    ofVec3f relativePosition;
 };

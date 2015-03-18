@@ -46,7 +46,7 @@ void ofApp::setup(){
     // CHOOSE DECODER
 //    decoder = new Decode r<Hoa3d, float>::Regular(hoaOrder, nOutputs);
     decoder = new Decoder<Hoa3d, float>::Binaural(hoaOrder);
-    decoder->computeMatrix(bufferSize);
+    decoder->computeRendering(bufferSize);
     line = new PolarLines<Hoa3d, float>(numberOfSources);
     line->setRamp(44100/50);
     
@@ -71,7 +71,7 @@ void ofApp::update(){
         position[i]+=ofNoise(seed[i].x,seed[i].y,seed[i].z)*velocity[i];
         sphere[i].setPosition(position[i]);
         
-        ofVec3f relativePosition = position[i] - centralSpherePosition;
+        relativePosition = position[i] - centralSpherePosition;
         
         line->setAzimuth(i, Math<float>::azimuth(relativePosition.x, relativePosition.y,
                                                  relativePosition.z));

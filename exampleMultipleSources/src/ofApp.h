@@ -45,11 +45,12 @@ class ofApp : public ofBaseApp{
     int order;
     
     ofMesh mesh;
-    ofVec2f * position;
-    ofVec2f * velocity;
-    ofVec2f * noise;
-    ofVec2f circleCenter;
-    ofVec2f circleMin, circleMax;
+    ofVec3f relativePosition;
+    ofVec3f * position;
+    ofVec3f * velocity;
+    ofVec3f * noise;
+    ofVec3f circleCenter;
+    ofVec3f circleMin, circleMax;
     float circleRadius;
     float velocityMax;
 };

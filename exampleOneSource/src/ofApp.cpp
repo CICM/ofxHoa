@@ -138,13 +138,13 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::audioOut( float * output, int bufferSize, int nChannels){
     
     // CALCULATE SOURCE POSITION IN RELATION TO THE CENTER
-    currentPosition = ofVec3f(mouseX,ofGetHeight() - mouseY)-circleCenter;
+    relativePosition = ofVec3f(mouseX,ofGetHeight() - mouseY)-circleCenter;
     
     // SET NEW RADIUS AND ANGLE USING HOA MATH CLASS
-//    line->setRadius(0, ofMap(sourcePosition.distance(circleCenter),0.0,circleRadius, 0.0,1.0));
-    line->setRadius(0, Math<float>::radius(currentPosition.x, currentPosition.y)*1.0/circleRadius);
-//    cout << Math<float>::radius(currentPosition.x, currentPosition.y)*0.01 <<endl;
-    line->setAzimuth(0, Math<float>::azimuth(currentPosition.x, currentPosition.y));
+
+    line->setRadius(0, Math<float>::radius(relativePosition.x, relativePosition.y)*1.0/circleRadius);
+
+    line->setAzimuth(0, Math<float>::azimuth(relativePosition.x, relativePosition.y));
     
     for (int i = 0; i<bufferSize; i++) {
         // CALCULATE SMOOTHED VALUES AND PUT THEM INTO THE ARRAY

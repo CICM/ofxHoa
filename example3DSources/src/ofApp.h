@@ -35,6 +35,7 @@ class ofApp : public ofBaseApp{
     vector<ofVec3f> position;
     vector<ofVec3f> velocity;
     vector<ofVec3f> seed;
+    ofVec3f relativePosition;
     vector<ofColor> sphereColor;
 
     float velMax;

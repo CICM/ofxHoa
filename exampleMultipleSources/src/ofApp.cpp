@@ -9,7 +9,7 @@ void ofApp::setup(){
     numberOfParticles = 10;
     
     // CREATE VARIABLES OF THE CENTER CIRCLE
-    circleCenter = ofVec2f(ofGetWidth()/2,ofGetHeight()/2);
+    circleCenter = ofVec3f(ofGetWidth()/2,ofGetHeight()/2);
     circleRadius = ofGetWidth()/4;
     circleMin = circleCenter - circleRadius;
     circleMax = circleCenter + circleRadius;
@@ -25,9 +25,9 @@ void ofApp::setup(){
     order = 3;
     
     // CREATE ALL THE ARRAYS WE'LL NEED
-    position = new ofVec2f[numberOfParticles];
-    velocity = new ofVec2f[numberOfParticles];
-    noise = new ofVec2f[numberOfParticles];
+    position = new ofVec3f[numberOfParticles];
+    velocity = new ofVec3f[numberOfParticles];
+    noise = new ofVec3f[numberOfParticles];
     lineValues = new float[numberOfParticles*2];
     frequencies = new float[numberOfParticles];
     inputBuffer = new float[numberOfParticles*bufferSize];
@@ -41,7 +41,7 @@ void ofApp::setup(){
 //    decoder = new Decoder<Hoa2d, float>::Binaural(order);
         decoder = new Decoder<Hoa2d, float>::Regular(order,nOutputs);
     // COMPUE MATRIX OF SPEAKERS
-    decoder->computeMatrix(bufferSize);
+    decoder->computeRendering(bufferSize);
     
     line = new PolarLines<Hoa2d, float>(numberOfParticles);
     
@@ -60,9 +60,9 @@ void ofApp::setup(){
     for (int i = 0; i<numberOfParticles; i++) {
         myOsc[i].setup(sampleRate);
         frequencies[i] = ofRandom(100, 1000);
-        position[i] = ofVec2f(ofRandom(circleMin.x, circleMax.x),ofRandom(circleMin.y, circleMax.y));
-        velocity[i] = ofVec2f(ofRandom(-velocityMax,velocityMax),ofRandom(-velocityMax,velocityMax));
-        noise[i] = ofVec2f(ofRandom(10000),ofRandom(10000));
+        position[i] = ofVec3f(ofRandom(circleMin.x, circleMax.x),ofRandom(circleMin.y, circleMax.y));
+        velocity[i] = ofVec3f(ofRandom(-velocityMax,velocityMax),ofRandom(-velocityMax,velocityMax));
+        noise[i] = ofVec3f(ofRandom(10000),ofRandom(10000));
         mesh.addVertex(position[i]);
         mesh.addColor(ofFloatColor(abs(ofRandomf()),abs(ofRandomf()),abs(ofRandomf())));
         
@@ -75,6 +75,8 @@ void ofApp::setup(){
 
     soundStream.setup(this, nOutputs, nInputs, sampleRate, bufferSize, nBuffers);
     
+    // MAKE A PRETIER CIRCLE
+    ofSetCircleResolution(50);
 }
 
 //--------------------------------------------------------------
@@ -90,18 +92,19 @@ void ofApp::update(){
             velocity[i].y*= -1;
         }
         
+        relativePosition.x = position[i].x - circleCenter.x;
+        relativePosition.y = (ofGetHeight() - position[i].y) - circleCenter.y;
+
         // CALCULATE NEW POSITION USING VELOCITY AND PERLIN NOISE
         noise[i]+=0.01;
         position[i]+=ofNoise(noise[i].x,noise[i].y)*velocity[i];
         mesh.setVertex(i, position[i]);
         
         // SET RADIUS AND AZIMUTH IN RELATION TO NEW POSITION
-        line->setRadius(i, ofMap(position[i].distance(circleCenter), 0.0, circleMax.x, 0.0, 10.0));
-        line->setAzimuth(i, Math<float>::azimuth(position[i].x-circleCenter.x,
-                                                 position[i].y-circleCenter.y));
-        
+        line->setRadius(i, Math<float>::radius(relativePosition.x,
+                                               relativePosition.y)* 1/circleRadius);
+        line->setAzimuth(i, Math<float>::azimuth(relativePosition.x, relativePosition.y));
     }
-
 }
 
 //--------------------------------------------------------------
@@ -109,7 +112,12 @@ void ofApp::draw(){
     
     // DRAW EVERYTHING
     ofBackgroundGradient(ofColor::gold, ofColor::black);
-//    ofCircle(circleCenter, circleRadius);
+    ofNoFill();
+    ofSetColor(ofColor::paleVioletRed);
+    for (int i = 0; i<10; i++){
+    ofCircle(circleCenter, circleRadius+i-5);
+    }
+    ofSetColor(255);
     mesh.draw();
 
 }
