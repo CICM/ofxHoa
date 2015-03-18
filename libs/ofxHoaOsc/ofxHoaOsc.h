@@ -4,7 +4,7 @@
 //
 //  Created by Claudio Cabral on 18/02/15.
 //
-// THIS IS AN EXTREMELLY NON-OPTIMIZED OSCILATOR, IT'S INCLUDED FOR TESTING PURPOSES
+// THIS IS AN EXTREMELLY NON-OPTIMIZED OSCILATOR, IT'S INCLUDED FOR TESTING AND EXAMPLE PURPOSES
 
 #ifndef __exampleOneSource__ofxHoaOsc__
 #define __exampleOneSource__ofxHoaOsc__

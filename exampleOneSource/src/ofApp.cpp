@@ -2,15 +2,15 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    
+    ofSetCircleResolution(50);
     //    UNCOMMENT THIS LINE TO PRINT AVALIABLE AUDIO DEVICES
 //    ofSoundStreamListDevices();
     
     // USE THIS FUNCTION TO SET THE AUDIO DEVICE IF NECESSARY
-//    soundStream.setDeviceID(0);
+//    soundStream.setDeviceID(5);
 
-    //ASSIGN AUDIO PARAMETERS
-    
+    /*ASSIGN AUDIO PARAMETERS
+    NUMBER OF OUTPUTS MUST BE >= ORDER*2+1 FOR DECODER ON REGULAR MODE*/
     nOutputs = 2;
     nInputs = 0;
     sampleRate = 44100;
@@ -22,6 +22,7 @@ void ofApp::setup(){
     
     // SETUP TEST OSCILATOR
     myOsc.setup(sampleRate);
+    myEnv.setup(sampleRate);
     
     // SETUP HOA
     order = 3;
@@ -31,8 +32,8 @@ void ofApp::setup(){
     // THE ENCODER CALCULATES THE SPHERICAL HARMONICS
     hoaEncoder = new EncoderDC<Hoa2d, float>(order);
     
-    /* THE DECODER TRANSLATES THE HARMONICS INTO AUDIO SIGNALS FOR OUTPUT
-     NUMBER OF MINIMUM OUPUT CHANNELS FOR REGULAR MODE = ORDER*2+1
+    /* THE DECODER TRANSLATES THE HARMONICS INTO AUDIO SIGNALS FOR OUTPUT.
+     THE NUMBER OF MINIMUM OUPUT CHANNELS FOR REGULAR MODE = ORDER*2+1
      SMALLER VALUES MAY BE USED, BUT THE RESULTING SOUND WON'T BE AS EXPECTED 
      FOR SMALL DIFFERENCES ( 5 OR 6 INSTEAD OF 7 SPEAKERS) IRREGULAR MODE MAY BE USED */
 
@@ -40,7 +41,12 @@ void ofApp::setup(){
     
     // BINAURAL MODE SET FOR USE WITH HEADPHONES
     hoaDecoder = new Decoder<Hoa2d, float>::Binaural(order);
-    hoaDecoder->computeMatrix(bufferSize);
+    
+    /* RENDERING IS COMPUTED IN RELATION TO THE SPEAKER'S ANGLES
+     THEY MAYBE SET WITH THE FUNCTION
+     hoaDecoder->setPlanewaveAzimuth(const ulong index, const float azimuth); */
+
+    hoaDecoder->computeRendering(bufferSize);
     // LINE USED TO SMOOTH RADIUS AND AZIMUTH VALUES
     line = new PolarLines<Hoa2d, float>(1);
     line->setRamp(round(50 * sampleRate/1000.0));
@@ -58,7 +64,7 @@ void ofApp::setup(){
     
     
     circleCenter = ofVec3f(ofGetWidth()/2,ofGetHeight()/2);
-    circleRadius = ofGetWidth()/4;
+    circleRadius = 100;
     
     sourcePosition = circleCenter;
     
@@ -76,8 +82,11 @@ void ofApp::update(){
 void ofApp::draw(){
     
     ofBackgroundGradient(ofColor::gold, ofColor::black);
-    ofSetColor(255,0,0);
+    ofSetColor(ofColor::crimson);
+    ofFill();
     ofCircle(sourcePosition, 10);
+    ofNoFill();
+    ofCircle(circleCenter, circleRadius);
     
 }
 
@@ -93,7 +102,7 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-
+ 
 }
 
 //--------------------------------------------------------------
@@ -129,11 +138,11 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::audioOut( float * output, int bufferSize, int nChannels){
     
     // CALCULATE SOURCE POSITION IN RELATION TO THE CENTER
-    currentPosition = ofVec3f(mouseX,mouseY)-circleCenter;
+    currentPosition = ofVec3f(mouseX,ofGetHeight() - mouseY)-circleCenter;
     
     // SET NEW RADIUS AND ANGLE USING HOA MATH CLASS
 //    line->setRadius(0, ofMap(sourcePosition.distance(circleCenter),0.0,circleRadius, 0.0,1.0));
-    line->setRadius(0, Math<float>::radius(currentPosition.x, currentPosition.y)*0.05);
+    line->setRadius(0, Math<float>::radius(currentPosition.x, currentPosition.y)*1.0/circleRadius);
 //    cout << Math<float>::radius(currentPosition.x, currentPosition.y)*0.01 <<endl;
     line->setAzimuth(0, Math<float>::azimuth(currentPosition.x, currentPosition.y));
     
@@ -142,7 +151,7 @@ void ofApp::audioOut( float * output, int bufferSize, int nChannels){
         line->process(smoothValues);
 
         // CREATE AUDIO INPUT
-        inputBuffer[i] = myOsc.triangle(330)*0.3;
+        inputBuffer[i] = myOsc.triangle(330)*myEnv.sawtooth(2)*0.1;
         
         // SET SMOOTHED CURRENT RADIUS AND AZIMUTH
         hoaEncoder->setRadius(smoothValues[0]);

@@ -12,7 +12,7 @@ void ofApp::setup(){
     nBuffers = (nOutputs+nInputs)*2;
     
     // CHOOSE NUMBER OF SOURCES AND SET POSITION OF CENTRAL SPHERE
-    numberOfSources = 8;
+    numberOfSources = 3;
     centralSphereRadius = 100;
     centralSpherePosition = ofVec3f(ofGetWidth()/2, ofGetHeight()/2, 0);
     centralSphere = ofSpherePrimitive(centralSphereRadius, 50);
@@ -44,7 +44,7 @@ void ofApp::setup(){
     encoder = new EncoderMulti<Hoa3d, float>(hoaOrder, numberOfSources);
     
     // CHOOSE DECODER
-//    decoder = new Decoder<Hoa3d, float>::Regular(hoaOrder, nOutputs);
+//    decoder = new Decode r<Hoa3d, float>::Regular(hoaOrder, nOutputs);
     decoder = new Decoder<Hoa3d, float>::Binaural(hoaOrder);
     decoder->computeMatrix(bufferSize);
     line = new PolarLines<Hoa3d, float>(numberOfSources);
@@ -73,8 +73,9 @@ void ofApp::update(){
         
         ofVec3f relativePosition = position[i] - centralSpherePosition;
         
-        line->setAzimuth(i, Math<float>::azimuth(relativePosition.x, relativePosition.y));
-        line->setElevation(i, Math<float>::elevation(relativePosition.x, relativePosition.y));
+        line->setAzimuth(i, Math<float>::azimuth(relativePosition.x, relativePosition.y,
+                                                 relativePosition.z));
+        line->setElevation(i, Math<float>::elevation(relativePosition.x, relativePosition.y, relativePosition.z));
         line->setRadius(i, Math<float>::radius(relativePosition.x, relativePosition.y)*0.01);
         
         

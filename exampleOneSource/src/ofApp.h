@@ -28,7 +28,7 @@ public:
     void audioOut(float * output, int bufferSize, int nChannels);
     void exit();
     
-    ofxHoaOsc myOsc;
+    ofxHoaOsc myOsc, myEnv;
     
     //MOST HOA CLASSES REQUIRE ARGUMENTS FOR INITILIZATION, SO WE CREATE THEM AS POINTERS
     EncoderDC<Hoa2d, float> * hoaEncoder;
@@ -49,7 +49,7 @@ public:
     int sampleRate;
     int nBuffers;
     
-    int circleRadius;
+    float circleRadius;
     ofVec3f circleCenter;
     ofVec3f sourcePosition;
     ofVec3f currentPosition;
