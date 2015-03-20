@@ -41,7 +41,7 @@ void ofApp::setup(){
     input = new float[numberOfSources];
     lineValue = new float[numberOfSources*3];
     
-    encoder = new EncoderMulti<Hoa3d, float>(hoaOrder, numberOfSources);
+    encoder = new Encoder<Hoa3d, float>::Multi(hoaOrder, numberOfSources);
     
     // CHOOSE DECODER
 //    decoder = new Decode r<Hoa3d, float>::Regular(hoaOrder, nOutputs);

@@ -30,7 +30,7 @@ void ofApp::setup(){
     harmonicsBuffer = new float[order*2+1];
     
     // THE ENCODER CALCULATES THE SPHERICAL HARMONICS
-    hoaEncoder = new EncoderDC<Hoa2d, float>(order);
+    hoaEncoder = new Encoder<Hoa2d, float>::DC(order);
     
     /* THE DECODER TRANSLATES THE HARMONICS INTO AUDIO SIGNALS FOR OUTPUT.
      THE NUMBER OF MINIMUM OUPUT CHANNELS FOR REGULAR MODE = ORDER*2+1
@@ -59,10 +59,12 @@ void ofApp::setup(){
     // FUNCTIONS TO SET THE ANGLE AND THE DISTANCE OF THE ENCODED SOUND SOURCE
     line->setRadiusDirect(0, 10000.);
     line->setAzimuthDirect(0, azimuth);
+
+
     hoaEncoder->setAzimuth(azimuth);
     hoaEncoder->setRadius(100000.);
     
-    
+
     circleCenter = ofVec3f(ofGetWidth()/2,ofGetHeight()/2);
     circleRadius = 100;
     

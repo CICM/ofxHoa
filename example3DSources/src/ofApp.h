@@ -54,7 +54,7 @@ class ofApp : public ofBaseApp{
     float * harmonic;
     float * input;
 
-    EncoderMulti<Hoa3d, float> * encoder;
+    Encoder<Hoa3d, float>::Multi * encoder;
     Decoder<Hoa3d, float> * decoder;
     
 		

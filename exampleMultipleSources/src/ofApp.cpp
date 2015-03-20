@@ -35,7 +35,7 @@ void ofApp::setup(){
     myOsc = new ofxHoaOsc[numberOfParticles];
     
     // THE ENCODERMULTI ALLOWS TO DISTRIBUTE MULTIPLE SOURCES IN SPACE
-    encoderMulti = new EncoderMulti<Hoa2d, float>(order,numberOfParticles);
+    encoderMulti = new Encoder<Hoa2d, float>::Multi(order,numberOfParticles);
 
     // CHOSE DECODER TYPE
 //    decoder = new Decoder<Hoa2d, float>::Binaural(order);

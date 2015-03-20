@@ -31,7 +31,7 @@ public:
     ofxHoaOsc myOsc, myEnv;
     
     //MOST HOA CLASSES REQUIRE ARGUMENTS FOR INITILIZATION, SO WE CREATE THEM AS POINTERS
-    EncoderDC<Hoa2d, float> * hoaEncoder;
+    Encoder<Hoa2d, float>::DC * hoaEncoder;
     Decoder<Hoa2d, float> * hoaDecoder;
     PolarLines<Hoa2d, float> * line;
     

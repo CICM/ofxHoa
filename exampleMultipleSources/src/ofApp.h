@@ -27,7 +27,7 @@ class ofApp : public ofBaseApp{
     void audioOut(float * output, int bufferSize, int nChannels);
     void exit();
 	
-    EncoderMulti<Hoa2d, float> * encoderMulti;
+    Encoder<Hoa2d, float>::Multi * encoderMulti;
     Decoder<Hoa2d, float> * decoder;
     PolarLines<Hoa2d, float> * line;
     
