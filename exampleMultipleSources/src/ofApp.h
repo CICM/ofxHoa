@@ -31,11 +31,10 @@ class ofApp : public ofBaseApp{
     Decoder<Hoa2d, float> * decoder;
     PolarLines<Hoa2d, float> * line;
     
-    ofxHoaOsc * myOsc;
+    ofxHoaOscillator<float> * myOsc;
     
     float * inputBuffer;
     float * harmonicsBuffer;
-    float * frequencies;
     float * lineValues;
 
     ofSoundStream soundStream;

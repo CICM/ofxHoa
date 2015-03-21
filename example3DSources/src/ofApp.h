@@ -46,8 +46,8 @@ class ofApp : public ofBaseApp{
     
     int hoaOrder;
     
-    vector<ofxHoaOsc> oscillator;
-    vector<float> frequency;
+    vector<ofxHoaOscillator<float> > oscillator;
+
     PolarLines<Hoa3d, float> * line;
     
     float * lineValue;

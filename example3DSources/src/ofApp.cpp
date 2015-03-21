@@ -28,8 +28,10 @@ void ofApp::setup(){
         velocity.push_back(ofVec3f(ofRandomf()*velMax, ofRandomf()*velMax,ofRandomf()*velMax));
         seed.push_back(ofVec3f(ofRandom(10000),ofRandom(10000),ofRandom(10000)));
         sphereColor.push_back(ofFloatColor(ofRandomuf(),ofRandomuf(),ofRandomuf()));
-        frequency.push_back(ofRandom(100, 1000));
-        oscillator.push_back(ofxHoaOsc());
+        
+        oscillator.push_back(ofxHoaOscillator<float>());
+        oscillator.back().setup(sampleRate, OF_TRIANGLE_WAVE);
+        oscillator.back().setFrequency(ofRandom(100, 1000));
         
     }
     
@@ -171,7 +173,7 @@ void ofApp::audioOut(float * output, int bufferSize, int nChannels){
         line->process(lineValue);
         
         for (int j = 0; j<numberOfSources; j++) {
-            input[j] = oscillator[j].triangle(frequency[j])/numberOfSources *0.4;
+            input[j] = oscillator[j].tick()/numberOfSources * 1.0;
             encoder->setRadius(j, lineValue[j]);
             encoder->setAzimuth(j, lineValue[j+numberOfSources]);
             encoder->setElevation(j, lineValue[j+numberOfSources*2]);
@@ -200,7 +202,6 @@ void ofApp::exit(){
     velocity.clear();
     seed.clear();
     sphereColor.clear();
-    frequency.clear();
     oscillator.clear();
     
 }

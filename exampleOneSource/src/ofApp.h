@@ -28,7 +28,7 @@ public:
     void audioOut(float * output, int bufferSize, int nChannels);
     void exit();
     
-    ofxHoaOsc myOsc, myEnv;
+    ofxHoaOscillator<float> myOsc, myEnv;
     
     //MOST HOA CLASSES REQUIRE ARGUMENTS FOR INITILIZATION, SO WE CREATE THEM AS POINTERS
     Encoder<Hoa2d, float>::DC * hoaEncoder;

@@ -29,10 +29,9 @@ void ofApp::setup(){
     velocity = new ofVec3f[numberOfParticles];
     noise = new ofVec3f[numberOfParticles];
     lineValues = new float[numberOfParticles*2];
-    frequencies = new float[numberOfParticles];
     inputBuffer = new float[numberOfParticles*bufferSize];
     harmonicsBuffer = new float[order*2+1];
-    myOsc = new ofxHoaOsc[numberOfParticles];
+    myOsc = new ofxHoaOscillator<float>[numberOfParticles];
     
     // THE ENCODERMULTI ALLOWS TO DISTRIBUTE MULTIPLE SOURCES IN SPACE
     encoderMulti = new Encoder<Hoa2d, float>::Multi(order,numberOfParticles);
@@ -58,8 +57,8 @@ void ofApp::setup(){
     
     // INITIALIZE ALL ARRAYS AND ADD VERTICES TO MESH
     for (int i = 0; i<numberOfParticles; i++) {
-        myOsc[i].setup(sampleRate);
-        frequencies[i] = ofRandom(100, 1000);
+        myOsc[i].setup(sampleRate, OF_TRIANGLE_WAVE);
+        myOsc[i].setFrequency(ofRandom(100, 1000));
         position[i] = ofVec3f(ofRandom(circleMin.x, circleMax.x),ofRandom(circleMin.y, circleMax.y));
         velocity[i] = ofVec3f(ofRandom(-velocityMax,velocityMax),ofRandom(-velocityMax,velocityMax));
         noise[i] = ofVec3f(ofRandom(10000),ofRandom(10000));
@@ -178,7 +177,8 @@ void ofApp::audioOut(float *output, int bufferSize, int nChannels){
         
         // SET CURRENT RADIUS AND AZIMUTH FOR EACH PARTICLE
         for (int j = 0; j<numberOfParticles; j++) {
-            inputBuffer[j] = (myOsc[j].triangle(frequencies[j])/numberOfParticles)*0.5;
+            
+            inputBuffer[j] = (myOsc[j].tick()/numberOfParticles)*0.5;
 
             encoderMulti->setRadius(j, lineValues[j]);
             encoderMulti->setAzimuth(j, lineValues[j+numberOfParticles]);
@@ -201,7 +201,6 @@ void  ofApp::exit(){
     delete [] velocity;
     delete [] noise;
     delete [] lineValues;
-    delete [] frequencies;
     delete [] inputBuffer;
     delete [] harmonicsBuffer;
     delete [] myOsc;

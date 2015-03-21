@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D38B4BD7D45D8550CFEF817 /* ofxHoaOsc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E6C58F3F4E76919613436CE /* ofxHoaOsc.cpp */; };
 		A18CDC58119667E6C0510938 /* Source.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84A35BC418ED9778E571E962 /* Source.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
@@ -63,6 +62,7 @@
 /* Begin PBXFileReference section */
 		0190812EA96FA79079A4F708 /* Tools.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Tools.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Tools.hpp"; sourceTree = SOURCE_ROOT; };
 		0A45FE374225665EBBB699E3 /* Planewaves.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Planewaves.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Planewaves.hpp"; sourceTree = SOURCE_ROOT; };
+		0EE444B01ABDE61400D2E76B /* ofxHoaOscillator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxHoaOscillator.h; path = ../libs/ofxHoaOsc/ofxHoaOscillator.h; sourceTree = "<group>"; };
 		3299B5F0527C1EE60A9B4C50 /* Math.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Math.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Math.hpp"; sourceTree = SOURCE_ROOT; };
 		3E10A66180CDBA7C978E1764 /* Harmonics.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Harmonics.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Harmonics.hpp"; sourceTree = SOURCE_ROOT; };
 		4B2C781104A15351EB6993D3 /* Defs.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Defs.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Defs.hpp"; sourceTree = SOURCE_ROOT; };
@@ -72,12 +72,10 @@
 		6218AD7D60658E29858270CC /* Hoa.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Hoa.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Hoa.hpp"; sourceTree = SOURCE_ROOT; };
 		68911386ED64AB7157CB0170 /* Meter.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Meter.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Meter.hpp"; sourceTree = SOURCE_ROOT; };
 		84A35BC418ED9778E571E962 /* Source.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Source.cpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Source.cpp"; sourceTree = SOURCE_ROOT; };
-		86E63F97063880A805ED5C90 /* ofxHoaOsc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxHoaOsc.h; path = ../../../addons/ofxHoa/libs/ofxHoaOsc/ofxHoaOsc.h; sourceTree = SOURCE_ROOT; };
 		8E01F0E0DD6DDC8F64E44B95 /* Optim.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Optim.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Optim.hpp"; sourceTree = SOURCE_ROOT; };
 		986635D9DE756DBCE99B3E84 /* Projector.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Projector.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Projector.hpp"; sourceTree = SOURCE_ROOT; };
 		991FF2A6D62B1D5D32BB2A00 /* Vector.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Vector.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Vector.hpp"; sourceTree = SOURCE_ROOT; };
 		9BA40B344E0B90C2DF810852 /* Wider.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Wider.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Wider.hpp"; sourceTree = SOURCE_ROOT; };
-		9E6C58F3F4E76919613436CE /* ofxHoaOsc.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxHoaOsc.cpp; path = ../../../addons/ofxHoa/libs/ofxHoaOsc/ofxHoaOsc.cpp; sourceTree = SOURCE_ROOT; };
 		9EAE7A59BEF09EBFF1F8C8FA /* Scope.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Scope.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Scope.hpp"; sourceTree = SOURCE_ROOT; };
 		A02F5BEC7DEA69D4FE8EEECA /* Encoder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Encoder.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Encoder.hpp"; sourceTree = SOURCE_ROOT; };
 		B69054F80248A5BE18B83BD7 /* Recomposer.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Recomposer.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Recomposer.hpp"; sourceTree = SOURCE_ROOT; };
@@ -176,8 +174,7 @@
 		6016DAEE19A7F99C09013E55 /* ofxHoaOsc */ = {
 			isa = PBXGroup;
 			children = (
-				9E6C58F3F4E76919613436CE /* ofxHoaOsc.cpp */,
-				86E63F97063880A805ED5C90 /* ofxHoaOsc.h */,
+				0EE444B01ABDE61400D2E76B /* ofxHoaOscillator.h */,
 			);
 			name = ofxHoaOsc;
 			sourceTree = "<group>";
@@ -382,7 +379,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A18CDC58119667E6C0510938 /* Source.cpp in Sources */,
-				3D38B4BD7D45D8550CFEF817 /* ofxHoaOsc.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 			);

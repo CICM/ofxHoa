@@ -9,7 +9,7 @@
 #include "../libs/HoaLibrary-Light/Sources/Hoa.hpp"
 
 //THIS FILE WAS INCLUDED TO ALLOW TESTS IN OFXHOA WITHOUT OTHER ADDONS
-#include "../libs/ofxHoaOsc/ofxHoaOsc.h"
+#include "../libs/ofxHoaOscillator/ofxHoaOscillator.h"
 
 #endif
 

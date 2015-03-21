@@ -21,8 +21,10 @@ void ofApp::setup(){
     inputBuffer = new float[bufferSize];
     
     // SETUP TEST OSCILATOR
-    myOsc.setup(sampleRate);
-    myEnv.setup(sampleRate);
+    myOsc.setup(sampleRate, OF_TRIANGLE_WAVE);
+    myOsc.setFrequency(330);
+    myEnv.setup(sampleRate, OF_SAWTOOTH_WAVE);
+    myEnv.setFrequency(2);
     
     // SETUP HOA
     order = 3;
@@ -153,7 +155,7 @@ void ofApp::audioOut( float * output, int bufferSize, int nChannels){
         line->process(smoothValues);
 
         // CREATE AUDIO INPUT
-        inputBuffer[i] = myOsc.triangle(330)*myEnv.sawtooth(2)*0.1;
+        inputBuffer[i] = myOsc.tick()*myEnv.tick()*0.1;
         
         // SET SMOOTHED CURRENT RADIUS AND AZIMUTH
         hoaEncoder->setRadius(smoothValues[0]);
