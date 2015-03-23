@@ -10,13 +10,17 @@
 
 #define OSC_BUFFER_SIZE 4096
 
-//#include "ofMain.h"
 #include <stdio.h>
 #include "../HoaLibrary-light/Sources/Defs.hpp"
 
+//if c++11...
+//#include <random>
+//std::mt19937 engine(0);
+//std::uniform_real_distribution<> dist;
+
 namespace hoa {
 
-    enum oscType { OF_SINE_WAVE, OF_TRIANGLE_WAVE, OF_SAWTOOTH_WAVE, OF_SQUARE_WAVE, OF_NOISE_WAVE, OF_PHASOR_WAVE };
+    enum oscType { OF_SINE_WAVE, OF_TRIANGLE_WAVE, OF_SAWTOOTH_WAVE, OF_SQUARE_WAVE, OF_PHASOR_WAVE };
     
 template <typename T> class ofxHoaOscillator {
     
@@ -32,16 +36,18 @@ private:
     
     int _index, _sampleRate;
     
+    void normalize();
+    
 public:
 
     ofxHoaOscillator();
     ~ofxHoaOscillator();
     
-    void setup(int sampleRate, oscType waveform);
-    void setFrequency(T frequency);
-    void setPhase(T phase);
+    void setup(int sampleRate, oscType waveform, bool normalize = true);
+   inline void setFrequency(T frequency);
+   inline void setPhase(T phase);
     
-    T tick();
+   inline T tick();
     
 };
 }
@@ -55,7 +61,7 @@ ofxHoaOscillator<T>::ofxHoaOscillator(){
     _phase = 0;
     _index = 0;
     _freq = 440;
-    
+    memset(_buffer, 0, sizeof(T)*OSC_BUFFER_SIZE);
     _step = _sampleRate;
     _step = OSC_BUFFER_SIZE/_step;
     
@@ -67,10 +73,11 @@ ofxHoaOscillator<T>::~ofxHoaOscillator(){
 }
 //SETUP
 template <typename T>
-void ofxHoaOscillator<T>::setup(int sampleRate, oscType waveform)
+void ofxHoaOscillator<T>::setup(int sampleRate, oscType waveform, bool normalize)
 {
+    
     for (int i = 0; i<OSC_BUFFER_SIZE; i++) {
-        
+    
         switch (waveform) {
                 
             case OF_SINE_WAVE:
@@ -90,22 +97,26 @@ void ofxHoaOscillator<T>::setup(int sampleRate, oscType waveform)
                 break;
                 
             case OF_SAWTOOTH_WAVE:
-                
-                _buffer[i] = -1 + i * 2.0/OSC_BUFFER_SIZE;
+
+                for (float j = 1; j<=10; j++){
+
+                _buffer[i] += sin (i * j * HOA_2PI/OSC_BUFFER_SIZE )/j;
+                }
+
                 break;
                 
             case OF_SQUARE_WAVE:
                 
-                if (i<=OSC_BUFFER_SIZE/2) _buffer[i]=-1;
-                
-                else  _buffer[i]=1;
+                for (float j = 1; j<=20; j+=2){
+                    
+                    _buffer[i] += sin (i * j * HOA_2PI/OSC_BUFFER_SIZE )/j;
+                }
                 
                 break;
                 
-            case OF_NOISE_WAVE:
+            case OF_PHASOR_WAVE:
                 
-                //                _buffer[i] = ofRandomf();
-                
+                _buffer[i] = i * 1.0/OSC_BUFFER_SIZE;
                 break;
                 
             default:
@@ -114,7 +125,7 @@ void ofxHoaOscillator<T>::setup(int sampleRate, oscType waveform)
         }
         
     }
-    
+    if (normalize) ofxHoaOscillator<T>::normalize();
 }
 
 template <typename T>
@@ -134,7 +145,6 @@ T ofxHoaOscillator<T>::tick() {
     }
     
     else { return 0;}
-    
 }
 
 template <typename T>
@@ -147,6 +157,18 @@ template <typename T>
 void ofxHoaOscillator<T>::setPhase(T phase) {
     
     _phase = phase * OSC_BUFFER_SIZE;
+}
+
+template<typename T>
+void ofxHoaOscillator<T>::normalize(){
+    float factor = 0;
+    
+    for (int i = 0; i<OSC_BUFFER_SIZE;i++){
+        if (_buffer[i]>factor) factor = _buffer[i];
+    }
+    for (int i = 0; i<OSC_BUFFER_SIZE;i++){
+        _buffer[i]/=factor;
+    }
 }
 
 #endif
