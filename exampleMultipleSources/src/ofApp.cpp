@@ -3,19 +3,19 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-//    soundStream.setDeviceID(2);
+    soundStream.setDeviceID(5);
 //    ofSoundStreamListDevices();
     // CHOOSE NUMBER OF PARTICLES; EACH ONE WILL HAVE IT'S OWN COLOR AND FREQUENCY
-    numberOfParticles = 10;
+    numberOfParticles = 3;
     
-    // CREATE VARIABLES OF THE CENTER CIRCLE
+    // CREATE VARIABLES OF THE SPEAKER CIRCLE
     circleCenter = ofVec3f(ofGetWidth()/2,ofGetHeight()/2);
     circleRadius = ofGetWidth()/4;
     circleMin = circleCenter - circleRadius;
     circleMax = circleCenter + circleRadius;
     
     // CONFIGURE AUDIO
-    nOutputs = 2;
+    nOutputs = 16;
     nInputs = 0;
     sampleRate = 44100;
     bufferSize = 512;
@@ -42,10 +42,17 @@ void ofApp::setup(){
     // COMPUE MATRIX OF SPEAKERS
     decoder->computeRendering(bufferSize);
     
+    /*THE OPTIM ALLOWS TO ACOUNT FOR DISPLACEMENTS IN IDEAL SPEAKER POSITION
+     "Basic" WORKS AS A BYPASS.
+     "InPhase" AND "MaxRe" SHOULD BE USED IF THE AMBSIONICS CIRCLE/SPHERE IS NOT PERFECT */
+//    optimizer = new Optim<Hoa2d, float>::Basic(order);
+    optimizer = new Optim<Hoa2d, float>::InPhase(order);
+
+    
     line = new PolarLines<Hoa2d, float>(numberOfParticles);
     
     // SET THE RAMP FOR SMOOTHING THE VALUES
-    line->setRamp(sampleRate/100);
+    line->setRamp(sampleRate/1000 * 50);
 
     // SETUP MESH
     mesh.setMode(OF_PRIMITIVE_POINTS);
@@ -57,7 +64,7 @@ void ofApp::setup(){
     
     // INITIALIZE ALL ARRAYS AND ADD VERTICES TO MESH
     for (int i = 0; i<numberOfParticles; i++) {
-        myOsc[i].setup(sampleRate, OF_TRIANGLE_WAVE);
+        myOsc[i].setup(sampleRate, oscType(floor(ofRandom(4))));
         myOsc[i].setFrequency(ofRandom(100, 1000));
         position[i] = ofVec3f(ofRandom(circleMin.x, circleMax.x),ofRandom(circleMin.y, circleMax.y));
         velocity[i] = ofVec3f(ofRandom(-velocityMax,velocityMax),ofRandom(-velocityMax,velocityMax));
@@ -65,7 +72,7 @@ void ofApp::setup(){
         mesh.addVertex(position[i]);
         mesh.addColor(ofFloatColor(abs(ofRandomf()),abs(ofRandomf()),abs(ofRandomf())));
         
-        line->setRadiusDirect(i, ofMap(position[i].distance(circleCenter), 0.0, circleMax.x, 0.0, 10.0));
+        line->setRadiusDirect(i, 10000);
         line->setAzimuthDirect(i, Math<float>::azimuth(position[i].x, position[i].y));
         
         lineValues[i] = line->getRadius(i);
@@ -100,6 +107,7 @@ void ofApp::update(){
         mesh.setVertex(i, position[i]);
         
         // SET RADIUS AND AZIMUTH IN RELATION TO NEW POSITION
+        // CircleRadius IS THE RADIUS IN PIXELS OF THE SPEAKER CIRCLE
         line->setRadius(i, Math<float>::radius(relativePosition.x,
                                                relativePosition.y)* 1/circleRadius);
         line->setAzimuth(i, Math<float>::azimuth(relativePosition.x, relativePosition.y));
@@ -113,9 +121,13 @@ void ofApp::draw(){
     ofBackgroundGradient(ofColor::gold, ofColor::black);
     ofNoFill();
     ofSetColor(ofColor::paleVioletRed);
+    
+    //MAKE A THICK CIRCLE
     for (int i = 0; i<10; i++){
     ofCircle(circleCenter, circleRadius+i-5);
     }
+    
+    //DRAW THE SOURCES
     ofSetColor(255);
     mesh.draw();
 
@@ -178,14 +190,19 @@ void ofApp::audioOut(float *output, int bufferSize, int nChannels){
         // SET CURRENT RADIUS AND AZIMUTH FOR EACH PARTICLE
         for (int j = 0; j<numberOfParticles; j++) {
             
-            inputBuffer[j] = (myOsc[j].tick()/numberOfParticles)*0.5;
+            inputBuffer[j] = (myOsc[j].tick()/numberOfParticles)*0.005;
 
             encoderMulti->setRadius(j, lineValues[j]);
             encoderMulti->setAzimuth(j, lineValues[j+numberOfParticles]);
         }
 
-        // PROCESS ONE SAMPLE OF EACH PARTICLE AND OUTPUT THE CORRESPONDING AUDIO
+        // PROCESS ONE SAMPLE OF EACH PARTICLE AND CREATE THE SPHERICAL HARMONICS
         encoderMulti->process(inputBuffer,harmonicsBuffer);
+        
+        // PROCESS THE HARMONICS WITH OPTIM
+        optimizer->process(harmonicsBuffer, harmonicsBuffer);
+        
+        // TRANSFORM THE HARMONICS TO AUDIO SIGNALS
         decoder->process(harmonicsBuffer, output+i*nChannels);
 
     }
@@ -207,5 +224,6 @@ void  ofApp::exit(){
     
     delete encoderMulti;
     delete decoder;
+    delete optimizer;
     delete line;
 }

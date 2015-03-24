@@ -28,7 +28,7 @@ class ofApp : public ofBaseApp{
     ofCamera cam;
     ofLight light;
     int numberOfSources;
-    ofSpherePrimitive centralSphere;
+    ofSpherePrimitive centralSphere, sphereOfSpeakers;
     ofVec3f centralSpherePosition;
     int centralSphereRadius;
     vector<ofSpherePrimitive> sphere;
@@ -56,6 +56,7 @@ class ofApp : public ofBaseApp{
 
     Encoder<Hoa3d, float>::Multi * encoder;
     Decoder<Hoa3d, float> * decoder;
+    Optim<Hoa3d, float> * optim;
     
 		
 };

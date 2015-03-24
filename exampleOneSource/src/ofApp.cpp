@@ -2,12 +2,12 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ofSetCircleResolution(50);
+
     //    UNCOMMENT THIS LINE TO PRINT AVALIABLE AUDIO DEVICES
 //    ofSoundStreamListDevices();
     
     // USE THIS FUNCTION TO SET THE AUDIO DEVICE IF NECESSARY
-//    soundStream.setDeviceID(5);
+    soundStream.setDeviceID(5);
 
     /*ASSIGN AUDIO PARAMETERS
     NUMBER OF OUTPUTS MUST BE >= ORDER*2+1 FOR DECODER ON REGULAR MODE*/
@@ -21,10 +21,10 @@ void ofApp::setup(){
     inputBuffer = new float[bufferSize];
     
     // SETUP TEST OSCILATOR
-    myOsc.setup(sampleRate, OF_TRIANGLE_WAVE);
+    myOsc.setup(sampleRate, OF_SQUARE_WAVE);
     myOsc.setFrequency(330);
     myEnv.setup(sampleRate, OF_SAWTOOTH_WAVE);
-    myEnv.setFrequency(2);
+    myEnv.setFrequency(-2);
     
     // SETUP HOA
     order = 3;
@@ -38,17 +38,22 @@ void ofApp::setup(){
      THE NUMBER OF MINIMUM OUPUT CHANNELS FOR REGULAR MODE = ORDER*2+1
      SMALLER VALUES MAY BE USED, BUT THE RESULTING SOUND WON'T BE AS EXPECTED 
      FOR SMALL DIFFERENCES ( 5 OR 6 INSTEAD OF 7 SPEAKERS) IRREGULAR MODE MAY BE USED */
-
-//        hoaDecoder = new Decoder<Hoa2d, float>::Regular(order, nOutputs);
+    hoaDecoder = new Decoder<Hoa2d, float>::Regular(order, nOutputs);
     
     // BINAURAL MODE SET FOR USE WITH HEADPHONES
-    hoaDecoder = new Decoder<Hoa2d, float>::Binaural(order);
+//    hoaDecoder = new Decoder<Hoa2d, float>::Binaural(order);
     
     /* RENDERING IS COMPUTED IN RELATION TO THE SPEAKER'S ANGLES
-     THEY MAYBE SET WITH THE FUNCTION
-     hoaDecoder->setPlanewaveAzimuth(const ulong index, const float azimuth); */
-
+     THEY MAYBE SET WITH THE FUNCTION hoaDecoder->setPlanewaveAzimuth(const ulong index,
+     const float azimuth); */
     hoaDecoder->computeRendering(bufferSize);
+    
+    /*THE OPTIM ALLOWS TO ACOUNT FOR DISPLACEMENTS IN IDEAL SPEAKER POSITION
+     "Basic" WORKS AS A BYPASS.
+     "InPhase" AND "MaxRe" SHOULD BE USED IF THE AMBSIONICS CIRCLE/SPHERE IS NOT PERFECT */
+//     hoaOptim = new Optim<Hoa2d, float>::Basic(order);
+    hoaOptim = new Optim<Hoa2d, float>::InPhase(order);
+    
     // LINE USED TO SMOOTH RADIUS AND AZIMUTH VALUES
     line = new PolarLines<Hoa2d, float>(1);
     line->setRamp(round(50 * sampleRate/1000.0));
@@ -71,6 +76,9 @@ void ofApp::setup(){
     circleRadius = 100;
     
     sourcePosition = circleCenter;
+    
+    // MAKE A PRETTIER CIRCLE
+    ofSetCircleResolution(50);
     
     //INITIALIZE SOUNDSTREAM
     soundStream.setup(this, nOutputs, nInputs, sampleRate, bufferSize, nBuffers);
@@ -154,8 +162,8 @@ void ofApp::audioOut( float * output, int bufferSize, int nChannels){
         // CALCULATE SMOOTHED VALUES AND PUT THEM INTO THE ARRAY
         line->process(smoothValues);
 
-        // CREATE AUDIO INPUT
-        inputBuffer[i] = myOsc.tick()*myEnv.tick()*0.1;
+        // CREATE AUDIO INPUT. THE LAST MULTIPLICATION IS THE VOLUME (SHOULD BE BETWEEN 0 AND 1)
+        inputBuffer[i] = myOsc.tick()*(myEnv.tick()+1)*0.05;
         
         // SET SMOOTHED CURRENT RADIUS AND AZIMUTH
         hoaEncoder->setRadius(smoothValues[0]);
@@ -164,6 +172,9 @@ void ofApp::audioOut( float * output, int bufferSize, int nChannels){
         // CREATE THE SPHERICAL HARMONICS
         hoaEncoder->process(inputBuffer+i, harmonicsBuffer);
 
+        // PROCESS THE HARMONICS WITH OPTIM
+        hoaOptim->process(harmonicsBuffer, harmonicsBuffer);
+        
         // DECODE THE HARMONICS; AUDIO TREATEMENTS ARE POSSIBLE IN BETWEEN THESE STEPS
         hoaDecoder->process(harmonicsBuffer, output+i*nChannels);
         }
@@ -175,6 +186,7 @@ void ofApp::exit(){
     
     delete hoaEncoder;
     delete hoaDecoder;
+    delete hoaOptim;
     delete line;
     delete [] inputBuffer;
     delete [] harmonicsBuffer;
