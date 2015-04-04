@@ -51,36 +51,31 @@ void ofApp::setup(){
     /*THE OPTIM ALLOWS TO ACOUNT FOR DISPLACEMENTS IN IDEAL SPEAKER POSITION
      "Basic" WORKS AS A BYPASS.
      "InPhase" AND "MaxRe" SHOULD BE USED IF THE AMBSIONICS CIRCLE/SPHERE IS NOT PERFECT */
-//     hoaOptim = new Optim<Hoa2d, float>::Basic(order);
-    hoaOptim = new Optim<Hoa2d, float>::InPhase(order);
+     hoaOptim = new Optim<Hoa2d, float>::Basic(order);
+//    hoaOptim = new Optim<Hoa2d, float>::InPhase(order);
     
-    // LINE USED TO SMOOTH RADIUS AND AZIMUTH VALUES
-    line = new PolarLines<Hoa2d, float>(1);
-    line->setRamp(round(50 * sampleRate/1000.0));
-    smoothValues = new float[2];
-    smoothValues[0] = 0.0;
-    smoothValues[1] = 0.0;
-    azimuth = 0;
-    distanceFromCenter = 0;
+    // ofxHoaCamera USED TO SET SOURCE POSITION AND VOID CLICKS IN AUDIO
+    hoaCamera = new ofxHoaCamera<Hoa2d, float>(1);
     
-    // FUNCTIONS TO SET THE ANGLE AND THE DISTANCE OF THE ENCODED SOUND SOURCE
-    line->setRadiusDirect(0, 10000.);
-    line->setAzimuthDirect(0, azimuth);
-
-
-    hoaEncoder->setAzimuth(azimuth);
-    hoaEncoder->setRadius(100000.);
-    
-
+    // SET THE POSITION IN SCREEN THAT'LL REPRESENT THE CENTER OF THE SPEAKER CIRCLE
+    // AND IT'S RADIUS
     circleCenter = ofVec3f(ofGetWidth()/2,ofGetHeight()/2);
     circleRadius = 100;
+    hoaCamera->setAmbisonicCenter(circleCenter);
+    hoaCamera->setAmbisonicRadius(circleRadius);
     
-    sourcePosition = circleCenter;
+    // SET THE RAMP FOR INTERPOLATION IN MILLISECONDS
+    hoaCamera->setRamp(50, sampleRate);
+    
+    // FUNCTIONS TO SET THE POSITION OF THE ENCODED SOUND SOURCE
+    // FAR AWAY TO AVOID CLICKS IN THE BEGINING
+    hoaCamera->setSourcePositionDirect(0, ofVec3f(10000,10000));
+    
     
     // MAKE A PRETTIER CIRCLE
     ofSetCircleResolution(50);
     
-    //INITIALIZE SOUNDSTREAM
+        //INITIALIZE SOUNDSTREAM
     soundStream.setup(this, nOutputs, nInputs, sampleRate, bufferSize, nBuffers);
 }
 
@@ -150,25 +145,26 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::audioOut( float * output, int bufferSize, int nChannels){
     
     // CALCULATE SOURCE POSITION IN RELATION TO THE CENTER
-    relativePosition = ofVec3f(mouseX,ofGetHeight() - mouseY)-circleCenter;
+//    relativePosition = ofVec3f(mouseX,ofGetHeight() - mouseY)-circleCenter;
     
     // SET NEW RADIUS AND ANGLE USING HOA MATH CLASS
 
-    line->setRadius(0, Math<float>::radius(relativePosition.x, relativePosition.y)*1.0/circleRadius);
+//    line->setRadius(0, Math<float>::radius(relativePosition.x, relativePosition.y)*1.0/circleRadius);
 
-    line->setAzimuth(0, Math<float>::azimuth(relativePosition.x, relativePosition.y));
-    
+//    line->setAzimuth(0, Math<float>::azimuth(relativePosition.x, relativePosition.y));
+    hoaCamera->setSourcePosition(0, ofVec3f(mouseX, mouseY));
     for (int i = 0; i<bufferSize; i++) {
         // CALCULATE SMOOTHED VALUES AND PUT THEM INTO THE ARRAY
-        line->process(smoothValues);
-
+//        line->process(smoothValues);
+        hoaCamera->process();
         // CREATE AUDIO INPUT. THE LAST MULTIPLICATION IS THE VOLUME (SHOULD BE BETWEEN 0 AND 1)
         inputBuffer[i] = myOsc.tick()*(myEnv.tick()+1)*0.05;
         
         // SET SMOOTHED CURRENT RADIUS AND AZIMUTH
-        hoaEncoder->setRadius(smoothValues[0]);
-        hoaEncoder->setAzimuth(smoothValues[1]);
-
+//        hoaEncoder->setRadius(smoothValues[0]);
+//        hoaEncoder->setAzimuth(smoothValues[1]);
+        hoaEncoder->setRadius(hoaCamera->getRadius(0));
+        hoaEncoder->setAzimuth(hoaCamera->getAzimuth(0));
         // CREATE THE SPHERICAL HARMONICS
         hoaEncoder->process(inputBuffer+i, harmonicsBuffer);
 
@@ -191,4 +187,6 @@ void ofApp::exit(){
     delete [] inputBuffer;
     delete [] harmonicsBuffer;
     delete [] smoothValues;
+    
+    delete      hoaCamera;
 }

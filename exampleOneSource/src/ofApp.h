@@ -35,7 +35,7 @@ public:
     Decoder<Hoa2d, float> * hoaDecoder;
     Optim<Hoa2d, float> * hoaOptim;
     PolarLines<Hoa2d, float> * line;
-    
+    ofxHoaCamera<Hoa2d, float> * hoaCamera;
     ofSoundStream soundStream;
     
     float * inputBuffer;

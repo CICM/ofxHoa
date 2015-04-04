@@ -5,7 +5,8 @@ void ofApp::setup(){
     ofEnableDepthTest();
     // INITIALIZE AUDIO VARIABLES
 //    soundStream.listDevices();
-    
+    ofSetWindowShape(1024, 500);
+    ofSetWindowPosition(0,0);
 //    soundStream.setDeviceID(5);
     nOutputs = 2;
     nInputs = 0;
@@ -14,7 +15,7 @@ void ofApp::setup(){
     nBuffers = (nOutputs+nInputs)*2;
     
     // CHOOSE NUMBER OF SOURCES AND SET POSITION OF CENTRAL SPHERE
-    numberOfSources = 3;
+    numberOfSources = 10;
     centralSphereRadius = 100;
     centralSpherePosition = ofVec3f(ofGetWidth()/2, ofGetHeight()/2, 0);
     centralSphere = ofSpherePrimitive(centralSphereRadius, 50);
@@ -33,7 +34,7 @@ void ofApp::setup(){
         sphereColor.push_back(ofFloatColor(ofRandomuf(),ofRandomuf(),ofRandomuf()));
         
         oscillator.push_back(ofxHoaOscillator<float>());
-        oscillator.back().setup(sampleRate, OF_TRIANGLE_WAVE);
+        oscillator.back().setup(sampleRate, oscType(floor(ofRandom(4.9))));
         oscillator.back().setFrequency(ofRandom(100, 1000));
         
     }
@@ -57,8 +58,8 @@ void ofApp::setup(){
     decoder->computeRendering(bufferSize);
     
     // CHOOSE OPTIM
-//    optim = new Optim<Hoa3d, float>::Basic(hoaOrder);
-        optim = new Optim<Hoa3d, float>::InPhase(hoaOrder);
+    optim = new Optim<Hoa3d, float>::Basic(hoaOrder);
+//        optim = new Optim<Hoa3d, float>::InPhase(hoaOrder);
     
     // CREATE LINE AND SET RAMP IN SAMPLES
     line = new PolarLines<Hoa3d, float>(numberOfSources);
@@ -93,7 +94,6 @@ void ofApp::update(){
         position[i]+=ofNoise(seed[i].x,seed[i].y,seed[i].z)*velocity[i];
         sphere[i].setPosition(position[i]);
         
-
         relativePosition.x = position[i].x - centralSpherePosition.x;
         relativePosition.y = (ofGetHeight() - position[i].y) - centralSpherePosition.y;
         relativePosition.z =  centralSpherePosition.z - position[i].z;
@@ -108,22 +108,21 @@ void ofApp::update(){
                                                relativePosition.y)
                         *4.0/centralSphereRadius);
         
-        
-        if (position[i].distance(centralSpherePosition)<centralSphereRadius+30) {
-            velocity[i]*= -1;
+        if (position[i].distance(centralSpherePosition) < centralSphereRadius +
+                                                            sphere[i].getRadius()) {
+            velocity[i].z *= -1;
         }
-        
+                
         if (position[i].x < 0 || position[i].x > ofGetWidth()) {
             velocity[i].x*= -1;
         }
         if (position[i].y < 0 || position[i].y > ofGetHeight()) {
             velocity[i].y*= -1;
         }
-        if (position[i].z < -500 || position[i].z > 500) {
+        if (position[i].z < -640 || position[i].z > 640) {
             velocity[i].z*= -1;
         }
     }
-//    cout << relativePosition.z << endl;
 }
 
 //--------------------------------------------------------------
@@ -199,16 +198,18 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::audioOut(float * output, int bufferSize, int nChannels){
    
     for (int i = 0; i<bufferSize; i++) {
+        
         line->process(lineValue);
         
         for (int j = 0; j<numberOfSources; j++) {
-            input[j] = oscillator[j].tick()/numberOfSources * 0.1;
+            input[j] = oscillator[j].tick()/numberOfSources * 0.5;
             encoder->setRadius(j, lineValue[j]);
             encoder->setAzimuth(j, lineValue[j+numberOfSources]);
             encoder->setElevation(j, lineValue[j+numberOfSources*2]);
         }
 
         encoder->process(input, harmonic);
+        optim->process(harmonic, harmonic);
         decoder->process(harmonic, output+i*nChannels);
     }
 }

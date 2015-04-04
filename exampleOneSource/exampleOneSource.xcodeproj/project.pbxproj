@@ -62,7 +62,8 @@
 /* Begin PBXFileReference section */
 		0190812EA96FA79079A4F708 /* Tools.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Tools.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Tools.hpp"; sourceTree = SOURCE_ROOT; };
 		0A45FE374225665EBBB699E3 /* Planewaves.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Planewaves.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Planewaves.hpp"; sourceTree = SOURCE_ROOT; };
-		0EB0F71F1AC196E5003C85CF /* ofxHoaOscillator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxHoaOscillator.h; sourceTree = "<group>"; };
+		0EAE9D231AC5CB4B00CB6594 /* ofxHoaCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxHoaCamera.h; sourceTree = "<group>"; };
+		0EAE9D241AC5CB4B00CB6594 /* ofxHoaOscillator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxHoaOscillator.h; sourceTree = "<group>"; };
 		3299B5F0527C1EE60A9B4C50 /* Math.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Math.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Math.hpp"; sourceTree = SOURCE_ROOT; };
 		3E10A66180CDBA7C978E1764 /* Harmonics.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Harmonics.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Harmonics.hpp"; sourceTree = SOURCE_ROOT; };
 		4B2C781104A15351EB6993D3 /* Defs.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Defs.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Defs.hpp"; sourceTree = SOURCE_ROOT; };
@@ -135,13 +136,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0EB0F71E1AC196E5003C85CF /* ofxHoaOscillator */ = {
+		0EAE9D221AC5CB4B00CB6594 /* ofxHoaClasses */ = {
 			isa = PBXGroup;
 			children = (
-				0EB0F71F1AC196E5003C85CF /* ofxHoaOscillator.h */,
+				0EAE9D231AC5CB4B00CB6594 /* ofxHoaCamera.h */,
+				0EAE9D241AC5CB4B00CB6594 /* ofxHoaOscillator.h */,
 			);
-			name = ofxHoaOscillator;
-			path = ../libs/ofxHoaOscillator;
+			name = ofxHoaClasses;
+			path = ../libs/ofxHoaClasses;
 			sourceTree = "<group>";
 		};
 		3A0BDB552FAB59EE9DCD8F0F /* Sources */ = {
@@ -286,7 +288,7 @@
 		EA9BA723784D775C9A86500D /* libs */ = {
 			isa = PBXGroup;
 			children = (
-				0EB0F71E1AC196E5003C85CF /* ofxHoaOscillator */,
+				0EAE9D221AC5CB4B00CB6594 /* ofxHoaClasses */,
 				4E7DE452E86C5BB2BA0427B9 /* HoaLibrary-Light */,
 			);
 			name = libs;

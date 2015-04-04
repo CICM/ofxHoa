@@ -8,8 +8,9 @@
 
 #include "../libs/HoaLibrary-Light/Sources/Hoa.hpp"
 
-//THIS FILE WAS INCLUDED TO ALLOW TESTS IN OFXHOA WITHOUT OTHER ADDONS
-#include "../libs/ofxHoaOscillator/ofxHoaOscillator.h"
+//FILES EXCLUVE TO THE oF RELEASE
+#include "../libs/ofxHoaClasses/ofxHoaOscillator.h"
+#include "../libs/ofxHoaClasses/ofxHoaCamera.h"
 
 #endif
 
