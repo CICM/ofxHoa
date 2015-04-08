@@ -10,7 +10,7 @@
 
 //FILES EXCLUVE TO THE oF RELEASE
 #include "../libs/ofxHoaClasses/ofxHoaOscillator.h"
-#include "../libs/ofxHoaClasses/ofxHoaCamera.h"
+#include "../libs/ofxHoaClasses/ofxHoaCoord.h"
 
 #endif
 

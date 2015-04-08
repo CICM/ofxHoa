@@ -3,14 +3,14 @@
  // For information on usage and redistribution, and for a DISCLAIMER OF ALL
  // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
  */
-#ifndef __OFX_HOA_CAMERA__
-#define __OFX_HOA_CAMERA__
+#ifndef __OFX_HOA_COORD__
+#define __OFX_HOA_COORD__
 
 #include "../libs/HoaLibrary-Light/Sources/Hoa.hpp"
 #include "ofMain.h"
 
 namespace hoa {
-template <Dimension D, typename T> class ofxHoaCamera{
+template <Dimension D, typename T> class ofxHoaCoord{
 
 private:
 
@@ -22,11 +22,13 @@ private:
 
 public:
     
-    ofxHoaCamera<D, T>(int numberOfSources);
-    ~ofxHoaCamera<D, T>();
+    ofxHoaCoord<D, T>(int numberOfSources);
+    ~ofxHoaCoord<D, T>();
     
     inline void setSourcePosition(int index, ofVec3f position);
+    inline void setSourcePosition(int index, float x, float y, float z);
     inline void setSourcePositionDirect(int index, ofVec3f position);
+    inline void setSourcePositionDirect(int index, float x, float y, float z);
     void setAmbisonicCenter(ofVec3f position);
     void setAmbisonicRadius(float radius);
 
@@ -43,7 +45,7 @@ public:
 };
 
 
-template <typename T> class ofxHoaCamera<Hoa2d, T>{
+template <typename T> class ofxHoaCoord<Hoa2d, T>{
 
 private:
 
@@ -55,13 +57,13 @@ private:
     
 public:
     
-    ofxHoaCamera<Hoa2d, T>(int numberOfSources) : _line(numberOfSources){
+    ofxHoaCoord<Hoa2d, T>(int numberOfSources) : _line(numberOfSources){
         _lineBuffer = new T[numberOfSources*2];
         memset(_lineBuffer, 0, sizeof(T)*numberOfSources*2);
         _numberOfSources = numberOfSources;
     }
     
-    ~ofxHoaCamera<Hoa2d, T>(){
+    ~ofxHoaCoord<Hoa2d, T>(){
         if (_lineBuffer) {
             delete [] _lineBuffer;
         }
@@ -75,6 +77,16 @@ public:
         _line.setAzimuth(index, Math<T>::azimuth(position.x - _ambisonicCenter.x,
                                           (ofGetHeight() - position.y) - _ambisonicCenter.y));
     }
+
+    inline void setSourcePosition(int index, float x, float y, float z  = 0.){
+    
+        _line.setRadius(index, Math<T>::radius(x - _ambisonicCenter.x,
+                                               (ofGetHeight() - y) - _ambisonicCenter.y) * 1.0/_ambisonicRadius);
+        
+        _line.setAzimuth(index, Math<T>::azimuth(x - _ambisonicCenter.x,
+                                                 (ofGetHeight() - y) - _ambisonicCenter.y));
+    
+    }
     
     inline void setSourcePositionDirect(int index, ofVec3f position){
         _line.setRadiusDirect(index, Math<T>::radius(position.x - _ambisonicCenter.x,
@@ -82,6 +94,15 @@ public:
         
         _line.setAzimuthDirect(index, Math<T>::azimuth(position.x - _ambisonicCenter.x,
                                                  (ofGetHeight() - position.y) - _ambisonicCenter.y));
+    }
+    
+    inline void setSourcePositionDirect(int index, float x, float y, float z = 0.){
+        
+        _line.setRadiusDirect(index, Math<T>::radius(x - _ambisonicCenter.x,
+                                               (ofGetHeight() - y) - _ambisonicCenter.y) * 1.0/_ambisonicRadius);
+        
+        _line.setAzimuthDirect(index, Math<T>::azimuth(x - _ambisonicCenter.x,
+                                                 (ofGetHeight() - y) - _ambisonicCenter.y));
     }
     
     void setAmbisonicCenter(ofVec3f position){
@@ -114,7 +135,7 @@ public:
 
 };
 
-template <typename T> class ofxHoaCamera<Hoa3d, T>{
+template <typename T> class ofxHoaCoord<Hoa3d, T>{
 
 private:
     
@@ -126,13 +147,13 @@ private:
     
 public:
     
-    ofxHoaCamera<Hoa3d, T>(int numberOfSources) : _line(numberOfSources){
+    ofxHoaCoord<Hoa3d, T>(int numberOfSources) : _line(numberOfSources){
         _lineBuffer = new T[numberOfSources*3];
         memset(_lineBuffer, 0, sizeof(T)*numberOfSources*3);
         _numberOfSources = numberOfSources;
     }
     
-    ~ofxHoaCamera<Hoa3d, T>(){
+    ~ofxHoaCoord<Hoa3d, T>(){
         if (_lineBuffer) {
             delete [] _lineBuffer;
         }
@@ -153,6 +174,21 @@ public:
                                                  (ofGetHeight() - position.y) - _ambisonicCenter.y));
     }
     
+    inline void setSourcePosition(int index, float x, float y, float z){
+        
+        _line.setRadius(index, Math<T>::radius(x - _ambisonicCenter.x,
+                                               (ofGetHeight() - y) - _ambisonicCenter.y,
+                                               _ambisonicCenter.z - z) * 1.0/_ambisonicRadius);
+        
+        _line.setAzimuth(index, Math<T>::azimuth(x - _ambisonicCenter.x,
+                                                 _ambisonicCenter.z - z,
+                                                 (ofGetHeight() - y) - _ambisonicCenter.y));
+        
+        _line.setElevation(index, Math<T>::elevation(x - _ambisonicCenter.x,
+                                                     _ambisonicCenter.z - z,
+                                                     (ofGetHeight() - y) - _ambisonicCenter.y));
+    }
+    
     inline void setSourcePositionDirect(int index, ofVec3f position){
         
         _line.setRadiusDirect(index, Math<T>::radius(position.x - _ambisonicCenter.x,
@@ -166,6 +202,21 @@ public:
         _line.setElevationDirect(index, Math<T>::elevation(position.x - _ambisonicCenter.x,
                                                      _ambisonicCenter.z - position.z,
                                                      (ofGetHeight() - position.y) - _ambisonicCenter.y));
+    }
+    
+    inline void setSourcePositionDirect(int index, float x, float y, float z){
+        
+        _line.setRadiusDirect(index, Math<T>::radius(x - _ambisonicCenter.x,
+                                               (ofGetHeight() - y) - _ambisonicCenter.y,
+                                               _ambisonicCenter.z - z) * 1.0/_ambisonicRadius);
+        
+        _line.setAzimuthDirect(index, Math<T>::azimuth(x - _ambisonicCenter.x,
+                                                 _ambisonicCenter.z - z,
+                                                 (ofGetHeight() - y) - _ambisonicCenter.y));
+        
+        _line.setElevationDirect(index, Math<T>::elevation(x - _ambisonicCenter.x,
+                                                     _ambisonicCenter.z - z,
+                                                     (ofGetHeight() - y) - _ambisonicCenter.y));
     }
     
     void setAmbisonicCenter(ofVec3f position){

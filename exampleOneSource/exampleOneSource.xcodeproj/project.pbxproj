@@ -62,7 +62,7 @@
 /* Begin PBXFileReference section */
 		0190812EA96FA79079A4F708 /* Tools.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Tools.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Tools.hpp"; sourceTree = SOURCE_ROOT; };
 		0A45FE374225665EBBB699E3 /* Planewaves.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Planewaves.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Planewaves.hpp"; sourceTree = SOURCE_ROOT; };
-		0EAE9D231AC5CB4B00CB6594 /* ofxHoaCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxHoaCamera.h; sourceTree = "<group>"; };
+		0E138C871AD5293300C04EA1 /* ofxHoaCoord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxHoaCoord.h; sourceTree = "<group>"; };
 		0EAE9D241AC5CB4B00CB6594 /* ofxHoaOscillator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxHoaOscillator.h; sourceTree = "<group>"; };
 		3299B5F0527C1EE60A9B4C50 /* Math.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Math.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Math.hpp"; sourceTree = SOURCE_ROOT; };
 		3E10A66180CDBA7C978E1764 /* Harmonics.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Harmonics.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Harmonics.hpp"; sourceTree = SOURCE_ROOT; };
@@ -139,7 +139,7 @@
 		0EAE9D221AC5CB4B00CB6594 /* ofxHoaClasses */ = {
 			isa = PBXGroup;
 			children = (
-				0EAE9D231AC5CB4B00CB6594 /* ofxHoaCamera.h */,
+				0E138C871AD5293300C04EA1 /* ofxHoaCoord.h */,
 				0EAE9D241AC5CB4B00CB6594 /* ofxHoaOscillator.h */,
 			);
 			name = ofxHoaClasses;

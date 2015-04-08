@@ -7,7 +7,7 @@ void ofApp::setup(){
 //    ofSoundStreamListDevices();
     
     // USE THIS FUNCTION TO SET THE AUDIO DEVICE IF NECESSARY
-    soundStream.setDeviceID(5);
+//    soundStream.setDeviceID(5);   
 
     /*ASSIGN AUDIO PARAMETERS
     NUMBER OF OUTPUTS MUST BE >= ORDER*2+1 FOR DECODER ON REGULAR MODE*/
@@ -54,22 +54,22 @@ void ofApp::setup(){
      hoaOptim = new Optim<Hoa2d, float>::Basic(order);
 //    hoaOptim = new Optim<Hoa2d, float>::InPhase(order);
     
-    // ofxHoaCamera USED TO SET SOURCE POSITION AND VOID CLICKS IN AUDIO
-    hoaCamera = new ofxHoaCamera<Hoa2d, float>(1);
+    // ofxHoaCoord USED TO SET SOURCE POSITION AND VOID CLICKS IN AUDIO
+    hoaCoord = new ofxHoaCoord<Hoa2d, float>(1);
     
     // SET THE POSITION IN SCREEN THAT'LL REPRESENT THE CENTER OF THE SPEAKER CIRCLE
     // AND IT'S RADIUS
     circleCenter = ofVec3f(ofGetWidth()/2,ofGetHeight()/2);
     circleRadius = 100;
-    hoaCamera->setAmbisonicCenter(circleCenter);
-    hoaCamera->setAmbisonicRadius(circleRadius);
+    hoaCoord->setAmbisonicCenter(circleCenter);
+    hoaCoord->setAmbisonicRadius(circleRadius);
     
     // SET THE RAMP FOR INTERPOLATION IN MILLISECONDS
-    hoaCamera->setRamp(50, sampleRate);
+    hoaCoord->setRamp(50, sampleRate);
     
     // FUNCTIONS TO SET THE POSITION OF THE ENCODED SOUND SOURCE
     // FAR AWAY TO AVOID CLICKS IN THE BEGINING
-    hoaCamera->setSourcePositionDirect(0, ofVec3f(10000,10000));
+    hoaCoord->setSourcePositionDirect(0, ofVec3f(10000,10000));
     
     
     // MAKE A PRETTIER CIRCLE
@@ -152,19 +152,19 @@ void ofApp::audioOut( float * output, int bufferSize, int nChannels){
 //    line->setRadius(0, Math<float>::radius(relativePosition.x, relativePosition.y)*1.0/circleRadius);
 
 //    line->setAzimuth(0, Math<float>::azimuth(relativePosition.x, relativePosition.y));
-    hoaCamera->setSourcePosition(0, ofVec3f(mouseX, mouseY));
+    hoaCoord->setSourcePosition(0, ofVec3f(mouseX, mouseY));
     for (int i = 0; i<bufferSize; i++) {
         // CALCULATE SMOOTHED VALUES AND PUT THEM INTO THE ARRAY
 //        line->process(smoothValues);
-        hoaCamera->process();
+        hoaCoord->process();
         // CREATE AUDIO INPUT. THE LAST MULTIPLICATION IS THE VOLUME (SHOULD BE BETWEEN 0 AND 1)
         inputBuffer[i] = myOsc.tick()*(myEnv.tick()+1)*0.05;
         
         // SET SMOOTHED CURRENT RADIUS AND AZIMUTH
 //        hoaEncoder->setRadius(smoothValues[0]);
 //        hoaEncoder->setAzimuth(smoothValues[1]);
-        hoaEncoder->setRadius(hoaCamera->getRadius(0));
-        hoaEncoder->setAzimuth(hoaCamera->getAzimuth(0));
+        hoaEncoder->setRadius(hoaCoord->getRadius(0));
+        hoaEncoder->setAzimuth(hoaCoord->getAzimuth(0));
         // CREATE THE SPHERICAL HARMONICS
         hoaEncoder->process(inputBuffer+i, harmonicsBuffer);
 
@@ -188,5 +188,5 @@ void ofApp::exit(){
     delete [] harmonicsBuffer;
     delete [] smoothValues;
     
-    delete      hoaCamera;
+    delete      hoaCoord;
 }
