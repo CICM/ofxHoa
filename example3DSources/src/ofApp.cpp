@@ -2,11 +2,14 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    
     ofEnableDepthTest();
     // INITIALIZE AUDIO VARIABLES
-//    soundStream.listDevices();
-    ofSetWindowShape(1024, 500);
-    ofSetWindowPosition(0,0);
+    //    soundStream.listDevices();
+//    ofSetWindowShape(1024, 500);
+//    ofSetWindowPosition(0,0);
+//        ofSetFullscreen(true);
+//    ofHideCursor();
 //    soundStream.setDeviceID(5);
     nOutputs = 2;
     nInputs = 0;
@@ -15,7 +18,7 @@ void ofApp::setup(){
     nBuffers = (nOutputs+nInputs)*2;
     
     // CHOOSE NUMBER OF SOURCES AND SET POSITION OF CENTRAL SPHERE
-    numberOfSources = 10;
+    numberOfSources = 3;
     centralSphereRadius = 100;
     centralSpherePosition = ofVec3f(ofGetWidth()/2, ofGetHeight()/2, 0);
     centralSphere = ofSpherePrimitive(centralSphereRadius, 50);
@@ -45,10 +48,8 @@ void ofApp::setup(){
     
     harmonic = new float[(hoaOrder+1)*(hoaOrder+1)];
     input = new float[numberOfSources];
-    lineValue = new float[numberOfSources*3];
-    memset(input, 0, sizeof(float)*(hoaOrder+1)*(hoaOrder+1));
-    memset(harmonic, 0, sizeof(float)*numberOfSources);
-    memset(lineValue, 0, sizeof(float)*numberOfSources*3);
+    memset(harmonic, 0, sizeof(float)*(hoaOrder+1)*(hoaOrder+1));
+    memset(input, 0, sizeof(float)*numberOfSources);
     
     encoder = new Encoder<Hoa3d, float>::Multi(hoaOrder, numberOfSources);
     
@@ -60,16 +61,22 @@ void ofApp::setup(){
     // CHOOSE OPTIM
     optim = new Optim<Hoa3d, float>::Basic(hoaOrder);
 //        optim = new Optim<Hoa3d, float>::InPhase(hoaOrder);
+
+    // CREATE HOACOORD AND SET RAMP IN MILLISECONDS
+    hoaCoord = new ofxHoaCoord<Hoa3d, float>(numberOfSources);
+    hoaCoord->setRamp(50, sampleRate);
+   
+    // SET SPATIAL REFERENCE
+    hoaCoord->setAmbisonicRadius(centralSphereRadius*4);
+    hoaCoord->setAmbisonicCenter(centralSpherePosition);
     
-    // CREATE LINE AND SET RAMP IN SAMPLES
-    line = new PolarLines<Hoa3d, float>(numberOfSources);
-    line->setRamp(sampleRate/1000 * 50);
     
+    // INTIALIZE VALUES TO A DISTANT POINT TO AVOID CLICKS IN THE BEGINNING
     for (int i = 0; i<numberOfSources; i++) {
-    line->setRadiusDirect(i, 10000);
+        hoaCoord->setSourcePositionDirect(i, ofVec3f(300,300,300));
     }
     
-    
+    cout << "coord2" << endl;
     // SET CAM POSITION
     cam.setPosition(ofGetWidth()/2, ofGetHeight()/2, 640);
     cam.setVFlip(true);
@@ -80,7 +87,7 @@ void ofApp::setup(){
     light.setPosition(0,0,10);
     light.lookAt(ofVec3f(ofGetWidth()/2, ofGetHeight(), 0));
 
-
+    cout << "setup audio" << endl;
     // INITIALIZE AUDIO
     soundStream.setup(this, nOutputs, nInputs, sampleRate, bufferSize, nBuffers);
 }
@@ -88,25 +95,19 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
+    //cout << "updqte" << endl;
+    if(!hoaCoord)
+    {
+        //cout << "empty" << endl;
+        return;
+    }
     for (int i = 0; i<numberOfSources; i++) {
         
         seed[i]+=0.01;
         position[i]+=ofNoise(seed[i].x,seed[i].y,seed[i].z)*velocity[i];
         sphere[i].setPosition(position[i]);
         
-        relativePosition.x = position[i].x - centralSpherePosition.x;
-        relativePosition.y = (ofGetHeight() - position[i].y) - centralSpherePosition.y;
-        relativePosition.z =  centralSpherePosition.z - position[i].z;
-        
-        line->setAzimuth(i, Math<float>::azimuth(relativePosition.x, relativePosition.z,
-                                                 relativePosition.y));
-        
-        line->setElevation(i, Math<float>::elevation(relativePosition.x, relativePosition.z,
-                                                     relativePosition.y));
-        
-        line->setRadius(i, Math<float>::radius(relativePosition.x, relativePosition.z,
-                                               relativePosition.y)
-                        *4.0/centralSphereRadius);
+        hoaCoord->setSourcePosition(i, position[i]);
         
         if (position[i].distance(centralSpherePosition) < centralSphereRadius +
                                                             sphere[i].getRadius()) {
@@ -128,6 +129,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
+    //cout << "draw" << endl;
     ofBackground(0);
 
     cam.begin();
@@ -197,15 +199,17 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 //--------------------------------------------------------------
 void ofApp::audioOut(float * output, int bufferSize, int nChannels){
    
+    //cout << "audioOut" << endl;
     for (int i = 0; i<bufferSize; i++) {
         
-        line->process(lineValue);
+        hoaCoord->process();
         
         for (int j = 0; j<numberOfSources; j++) {
             input[j] = oscillator[j].tick()/numberOfSources * 0.5;
-            encoder->setRadius(j, lineValue[j]);
-            encoder->setAzimuth(j, lineValue[j+numberOfSources]);
-            encoder->setElevation(j, lineValue[j+numberOfSources*2]);
+            
+            encoder->setRadius(j, hoaCoord->getRadius(j));
+            encoder->setAzimuth(j, hoaCoord->getAzimuth(j));
+            encoder->setElevation(j, hoaCoord->getElevation(j));
         }
 
         encoder->process(input, harmonic);
@@ -224,8 +228,7 @@ void ofApp::exit(){
     
     delete [] harmonic;
     delete [] input;
-    delete [] lineValue;
-    delete line;
+    delete hoaCoord;
     delete encoder;
     delete decoder;
     delete optim;

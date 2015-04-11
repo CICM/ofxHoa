@@ -160,18 +160,18 @@ public:
     }
     
     inline void setSourcePosition(int index, ofVec3f position){
-        
+
         _line.setRadius(index, Math<T>::radius(position.x - _ambisonicCenter.x,
                                                (ofGetHeight() - position.y) - _ambisonicCenter.y,
                                                _ambisonicCenter.z - position.z) * 1.0/_ambisonicRadius);
-        
+
         _line.setAzimuth(index, Math<T>::azimuth(position.x - _ambisonicCenter.x,
                                                  _ambisonicCenter.z - position.z,
                                                  (ofGetHeight() - position.y) - _ambisonicCenter.y));
-        
+
         _line.setElevation(index, Math<T>::elevation(position.x - _ambisonicCenter.x,
                                                  _ambisonicCenter.z - position.z,
-                                                 (ofGetHeight() - position.y) - _ambisonicCenter.y));
+                                                (ofGetHeight() - position.y) - _ambisonicCenter.y));
     }
     
     inline void setSourcePosition(int index, float x, float y, float z){

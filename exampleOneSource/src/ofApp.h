@@ -34,7 +34,6 @@ public:
     Encoder<Hoa2d, float>::DC * hoaEncoder;
     Decoder<Hoa2d, float> * hoaDecoder;
     Optim<Hoa2d, float> * hoaOptim;
-    PolarLines<Hoa2d, float> * line;
     ofxHoaCoord<Hoa2d, float> * hoaCoord;
     ofSoundStream soundStream;
     

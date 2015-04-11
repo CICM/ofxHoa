@@ -2,8 +2,9 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
-    soundStream.setDeviceID(5);
+//    ofSetFullscreen(true);
+//    ofHideCursor();
+//    soundStream.setDeviceID(5);
 //    ofSoundStreamListDevices();
     // CHOOSE NUMBER OF PARTICLES; EACH ONE WILL HAVE IT'S OWN COLOR AND FREQUENCY
     numberOfParticles = 3;
@@ -15,7 +16,7 @@ void ofApp::setup(){
     circleMax = circleCenter + circleRadius;
     
     // CONFIGURE AUDIO
-    nOutputs = 16;
+    nOutputs = 2;
     nInputs = 0;
     sampleRate = 44100;
     bufferSize = 512;
@@ -28,7 +29,6 @@ void ofApp::setup(){
     position = new ofVec3f[numberOfParticles];
     velocity = new ofVec3f[numberOfParticles];
     noise = new ofVec3f[numberOfParticles];
-    lineValues = new float[numberOfParticles*2];
     inputBuffer = new float[numberOfParticles*bufferSize];
     harmonicsBuffer = new float[order*2+1];
     myOsc = new ofxHoaOscillator<float>[numberOfParticles];
@@ -49,10 +49,10 @@ void ofApp::setup(){
     optimizer = new Optim<Hoa2d, float>::InPhase(order);
 
     
-    line = new PolarLines<Hoa2d, float>(numberOfParticles);
-    
+    hoaCoord = new ofxHoaCoord<Hoa2d, float>(numberOfParticles);
+
     // SET THE RAMP FOR SMOOTHING THE VALUES
-    line->setRamp(sampleRate/1000 * 50);
+    hoaCoord->setRamp(50, sampleRate);
 
     // SETUP MESH
     mesh.setMode(OF_PRIMITIVE_POINTS);
@@ -64,19 +64,22 @@ void ofApp::setup(){
     
     // INITIALIZE ALL ARRAYS AND ADD VERTICES TO MESH
     for (int i = 0; i<numberOfParticles; i++) {
-        myOsc[i].setup(sampleRate, oscType(floor(ofRandom(4))));
+        
+        myOsc[i].setup(sampleRate, OF_TRIANGLE_WAVE);
+                       
+                       //oscType(floor(ofRandom(4))));
         myOsc[i].setFrequency(ofRandom(100, 1000));
+        
         position[i] = ofVec3f(ofRandom(circleMin.x, circleMax.x),ofRandom(circleMin.y, circleMax.y));
         velocity[i] = ofVec3f(ofRandom(-velocityMax,velocityMax),ofRandom(-velocityMax,velocityMax));
         noise[i] = ofVec3f(ofRandom(10000),ofRandom(10000));
+        
         mesh.addVertex(position[i]);
         mesh.addColor(ofFloatColor(abs(ofRandomf()),abs(ofRandomf()),abs(ofRandomf())));
         
-        line->setRadiusDirect(i, 10000);
-        line->setAzimuthDirect(i, Math<float>::azimuth(position[i].x, position[i].y));
-        
-        lineValues[i] = line->getRadius(i);
-        lineValues[i+numberOfParticles] = line->getAzimuth(i);
+        hoaCoord->setAmbisonicCenter(circleCenter);
+        hoaCoord->setAmbisonicRadius(circleRadius);
+        hoaCoord->setSourcePositionDirect(i, position[i]);
     }
 
     soundStream.setup(this, nOutputs, nInputs, sampleRate, bufferSize, nBuffers);
@@ -106,11 +109,8 @@ void ofApp::update(){
         position[i]+=ofNoise(noise[i].x,noise[i].y)*velocity[i];
         mesh.setVertex(i, position[i]);
         
-        // SET RADIUS AND AZIMUTH IN RELATION TO NEW POSITION
-        // CircleRadius IS THE RADIUS IN PIXELS OF THE SPEAKER CIRCLE
-        line->setRadius(i, Math<float>::radius(relativePosition.x,
-                                               relativePosition.y)* 1/circleRadius);
-        line->setAzimuth(i, Math<float>::azimuth(relativePosition.x, relativePosition.y));
+        // SET SOURCE POSITION
+//        hoaCoord->setSourcePosition(i, position[i]);
     }
 }
 
@@ -181,19 +181,24 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 //--------------------------------------------------------------
 void ofApp::audioOut(float *output, int bufferSize, int nChannels){
 
+    for (int i = 0; i<numberOfParticles; i++) {
+        hoaCoord->setSourcePosition(i, position[i]);
+    }
+    
     // BEGIN AUDIO LOOP
     for (int i = 0; i<bufferSize; i++) {
+        // SMOOTH VALUES
+        hoaCoord->process();
 
-    // SMOOTH VALUES
-    line->process(lineValues);
         
-        // SET CURRENT RADIUS AND AZIMUTH FOR EACH PARTICLE
+        // SET CURRENT POSITION FOR EACH PARTICLE
         for (int j = 0; j<numberOfParticles; j++) {
             
-            inputBuffer[j] = (myOsc[j].tick()/numberOfParticles)*0.005;
+            inputBuffer[j] = (myOsc[j].tick()/numberOfParticles)*0.3;
 
-            encoderMulti->setRadius(j, lineValues[j]);
-            encoderMulti->setAzimuth(j, lineValues[j+numberOfParticles]);
+            //GET CALCULATED RADIUS AND AZIMUTH AND PASS THEM TO THE ENCODER
+            encoderMulti->setRadius(j, hoaCoord->getRadius(j));
+            encoderMulti->setAzimuth(j, hoaCoord->getAzimuth(j));
         }
 
         // PROCESS ONE SAMPLE OF EACH PARTICLE AND CREATE THE SPHERICAL HARMONICS
@@ -225,5 +230,5 @@ void  ofApp::exit(){
     delete encoderMulti;
     delete decoder;
     delete optimizer;
-    delete line;
+    delete hoaCoord;
 }

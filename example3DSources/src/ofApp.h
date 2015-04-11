@@ -30,7 +30,7 @@ class ofApp : public ofBaseApp{
     int numberOfSources;
     ofSpherePrimitive centralSphere, sphereOfSpeakers;
     ofVec3f centralSpherePosition;
-    int centralSphereRadius;
+    float centralSphereRadius;
     vector<ofSpherePrimitive> sphere;
     vector<ofVec3f> position;
     vector<ofVec3f> velocity;
@@ -48,9 +48,8 @@ class ofApp : public ofBaseApp{
     
     vector<ofxHoaOscillator<float> > oscillator;
 
-    PolarLines<Hoa3d, float> * line;
+    ofxHoaCoord<Hoa3d, float> * hoaCoord;
     
-    float * lineValue;
     float * harmonic;
     float * input;
 

@@ -30,7 +30,7 @@ class ofApp : public ofBaseApp{
     Encoder<Hoa2d, float>::Multi * encoderMulti;
     Decoder<Hoa2d, float> * decoder;
     Optim<Hoa2d, float> * optimizer;
-    PolarLines<Hoa2d, float> * line;
+    ofxHoaCoord<Hoa2d, float> * hoaCoord;
     
     ofxHoaOscillator<float> * myOsc;
     

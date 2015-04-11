@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
+    ofSetFullscreen(true);
     //    UNCOMMENT THIS LINE TO PRINT AVALIABLE AUDIO DEVICES
 //    ofSoundStreamListDevices();
     
@@ -144,27 +144,21 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 void ofApp::audioOut( float * output, int bufferSize, int nChannels){
     
-    // CALCULATE SOURCE POSITION IN RELATION TO THE CENTER
-//    relativePosition = ofVec3f(mouseX,ofGetHeight() - mouseY)-circleCenter;
-    
-    // SET NEW RADIUS AND ANGLE USING HOA MATH CLASS
-
-//    line->setRadius(0, Math<float>::radius(relativePosition.x, relativePosition.y)*1.0/circleRadius);
-
-//    line->setAzimuth(0, Math<float>::azimuth(relativePosition.x, relativePosition.y));
+    //SET SOURCE POSITION IN AUDIO FUNCTION
     hoaCoord->setSourcePosition(0, ofVec3f(mouseX, mouseY));
+    
     for (int i = 0; i<bufferSize; i++) {
-        // CALCULATE SMOOTHED VALUES AND PUT THEM INTO THE ARRAY
-//        line->process(smoothValues);
+        
+        // CALCULATE SMOOTHED VALUES
         hoaCoord->process();
+        
         // CREATE AUDIO INPUT. THE LAST MULTIPLICATION IS THE VOLUME (SHOULD BE BETWEEN 0 AND 1)
         inputBuffer[i] = myOsc.tick()*(myEnv.tick()+1)*0.05;
         
         // SET SMOOTHED CURRENT RADIUS AND AZIMUTH
-//        hoaEncoder->setRadius(smoothValues[0]);
-//        hoaEncoder->setAzimuth(smoothValues[1]);
         hoaEncoder->setRadius(hoaCoord->getRadius(0));
         hoaEncoder->setAzimuth(hoaCoord->getAzimuth(0));
+        
         // CREATE THE SPHERICAL HARMONICS
         hoaEncoder->process(inputBuffer+i, harmonicsBuffer);
 
@@ -183,10 +177,9 @@ void ofApp::exit(){
     delete hoaEncoder;
     delete hoaDecoder;
     delete hoaOptim;
-    delete line;
+
     delete [] inputBuffer;
     delete [] harmonicsBuffer;
     delete [] smoothValues;
-    
     delete      hoaCoord;
 }
