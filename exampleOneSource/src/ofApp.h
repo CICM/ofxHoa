@@ -37,11 +37,9 @@ public:
     ofxHoaCoord<Hoa2d, float> * hoaCoord;
     ofSoundStream soundStream;
     
-    float * inputBuffer;
+    float input;
     float * harmonicsBuffer;
-    float * smoothValues;
-    float azimuth;
-    float distanceFromCenter;
+
     
     int order;
     int nInputs, nOutputs;
@@ -52,5 +50,4 @@ public:
     float circleRadius;
     ofVec3f circleCenter;
     ofVec3f sourcePosition;
-    ofVec3f relativePosition;
 };

@@ -17,8 +17,8 @@ void ofApp::setup(){
     bufferSize = 512;
     nBuffers = (nInputs+nOutputs)*2;
     
-    // CREATE BUFFER FOR SOUND INPUT
-    inputBuffer = new float[bufferSize];
+    // INITIALIZE INPUT TO 0
+    input = 0;
     
     // SETUP TEST OSCILATOR
     myOsc.setup(sampleRate, OF_SQUARE_WAVE);
@@ -83,6 +83,7 @@ void ofApp::setup(){
 void ofApp::update(){
     // CHANGE SOURCE POSITION
     sourcePosition = ofVec3f(mouseX, mouseY);
+    hoaCoord->setSourcePosition(0, sourcePosition);
 }
 
 //--------------------------------------------------------------
@@ -144,23 +145,20 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 void ofApp::audioOut( float * output, int bufferSize, int nChannels){
     
-    //SET SOURCE POSITION IN AUDIO FUNCTION
-    hoaCoord->setSourcePosition(0, ofVec3f(mouseX, mouseY));
-    
     for (int i = 0; i<bufferSize; i++) {
         
         // CALCULATE SMOOTHED VALUES
         hoaCoord->process();
         
         // CREATE AUDIO INPUT. THE LAST MULTIPLICATION IS THE VOLUME (SHOULD BE BETWEEN 0 AND 1)
-        inputBuffer[i] = myOsc.tick()*(myEnv.tick()+1)*0.05;
-        
+//        inputBuffer[i] = myOsc.tick()*(myEnv.tick()+1)*0.05;
+        input = myOsc.tick()*(myEnv.tick()+1)*0.05;
         // SET SMOOTHED CURRENT RADIUS AND AZIMUTH
         hoaEncoder->setRadius(hoaCoord->getRadius(0));
         hoaEncoder->setAzimuth(hoaCoord->getAzimuth(0));
         
         // CREATE THE SPHERICAL HARMONICS
-        hoaEncoder->process(inputBuffer+i, harmonicsBuffer);
+        hoaEncoder->process(&input, harmonicsBuffer);
 
         // PROCESS THE HARMONICS WITH OPTIM
         hoaOptim->process(harmonicsBuffer, harmonicsBuffer);
@@ -177,9 +175,6 @@ void ofApp::exit(){
     delete hoaEncoder;
     delete hoaDecoder;
     delete hoaOptim;
-
-    delete [] inputBuffer;
+    delete hoaCoord;
     delete [] harmonicsBuffer;
-    delete [] smoothValues;
-    delete      hoaCoord;
 }

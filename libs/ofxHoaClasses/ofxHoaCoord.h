@@ -58,12 +58,19 @@ private:
 public:
     
     ofxHoaCoord<Hoa2d, T>(int numberOfSources) : _line(numberOfSources){
+        
         _lineBuffer = new T[numberOfSources*2];
         memset(_lineBuffer, 0, sizeof(T)*numberOfSources*2);
         _numberOfSources = numberOfSources;
+        
+        for(int i = 0; i<numberOfSources;i++){
+            _line.setRadiusDirect(i,10000);
+            _line.setAzimuthDirect(i,0);
+        }
     }
     
     ~ofxHoaCoord<Hoa2d, T>(){
+        
         if (_lineBuffer) {
             delete [] _lineBuffer;
         }
@@ -148,12 +155,20 @@ private:
 public:
     
     ofxHoaCoord<Hoa3d, T>(int numberOfSources) : _line(numberOfSources){
+        
         _lineBuffer = new T[numberOfSources*3];
         memset(_lineBuffer, 0, sizeof(T)*numberOfSources*3);
         _numberOfSources = numberOfSources;
+        
+        for(int i = 0; i<numberOfSources;i++){
+            _line.setRadiusDirect(i,10000);
+            _line.setAzimuthDirect(i,0);
+            _line.setElevationDirect(i,0);
+        }
     }
     
     ~ofxHoaCoord<Hoa3d, T>(){
+        
         if (_lineBuffer) {
             delete [] _lineBuffer;
         }

@@ -2,10 +2,10 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-//    ofSetFullscreen(true);
-//    ofHideCursor();
+
 //    soundStream.setDeviceID(5);
 //    ofSoundStreamListDevices();
+    
     // CHOOSE NUMBER OF PARTICLES; EACH ONE WILL HAVE IT'S OWN COLOR AND FREQUENCY
     numberOfParticles = 3;
     
@@ -29,7 +29,7 @@ void ofApp::setup(){
     position = new ofVec3f[numberOfParticles];
     velocity = new ofVec3f[numberOfParticles];
     noise = new ofVec3f[numberOfParticles];
-    inputBuffer = new float[numberOfParticles*bufferSize];
+    inputBuffer = new float[numberOfParticles];
     harmonicsBuffer = new float[order*2+1];
     myOsc = new ofxHoaOscillator<float>[numberOfParticles];
     
@@ -54,7 +54,7 @@ void ofApp::setup(){
     // SET THE RAMP FOR SMOOTHING THE VALUES
     hoaCoord->setRamp(50, sampleRate);
 
-    // SETUP MESH
+    // SETUP MESH, THIS IS JUST A CHEAP WAY OF MAKING BIG POINTS
     mesh.setMode(OF_PRIMITIVE_POINTS);
     glEnable(GL_POINT_SMOOTH);
     glPointSize(20);
@@ -110,7 +110,7 @@ void ofApp::update(){
         mesh.setVertex(i, position[i]);
         
         // SET SOURCE POSITION
-//        hoaCoord->setSourcePosition(i, position[i]);
+        hoaCoord->setSourcePosition(i, position[i]);
     }
 }
 
@@ -180,10 +180,6 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 //--------------------------------------------------------------
 void ofApp::audioOut(float *output, int bufferSize, int nChannels){
-
-    for (int i = 0; i<numberOfParticles; i++) {
-        hoaCoord->setSourcePosition(i, position[i]);
-    }
     
     // BEGIN AUDIO LOOP
     for (int i = 0; i<bufferSize; i++) {
@@ -222,7 +218,6 @@ void  ofApp::exit(){
     delete [] position;
     delete [] velocity;
     delete [] noise;
-    delete [] lineValues;
     delete [] inputBuffer;
     delete [] harmonicsBuffer;
     delete [] myOsc;

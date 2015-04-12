@@ -3,14 +3,13 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
+    // ENABLE DEPTH TEST FOR 3D DRAWING WITH Z-AXIS
     ofEnableDepthTest();
+
+//  soundStream.listDevices();
+//  soundStream.setDeviceID(5);
     // INITIALIZE AUDIO VARIABLES
-    //    soundStream.listDevices();
-//    ofSetWindowShape(1024, 500);
-//    ofSetWindowPosition(0,0);
-//        ofSetFullscreen(true);
-//    ofHideCursor();
-//    soundStream.setDeviceID(5);
+
     nOutputs = 2;
     nInputs = 0;
     sampleRate = 44100;
@@ -18,13 +17,12 @@ void ofApp::setup(){
     nBuffers = (nOutputs+nInputs)*2;
     
     // CHOOSE NUMBER OF SOURCES AND SET POSITION OF CENTRAL SPHERE
-    numberOfSources = 3;
+    numberOfSources = 5;
     centralSphereRadius = 100;
     centralSpherePosition = ofVec3f(ofGetWidth()/2, ofGetHeight()/2, 0);
     centralSphere = ofSpherePrimitive(centralSphereRadius, 50);
     centralSphere.setPosition(centralSpherePosition);
-    sphereOfSpeakers = ofSpherePrimitive(centralSphereRadius*4, 200);
-    sphereOfSpeakers.setPosition(centralSpherePosition);
+
     velMax = 10;
     
     // CREATE PARTICLES AND ASSOCIATED OSCILLATOR
@@ -54,8 +52,8 @@ void ofApp::setup(){
     encoder = new Encoder<Hoa3d, float>::Multi(hoaOrder, numberOfSources);
     
     // CHOOSE DECODER
-//    decoder = new Decoder<Hoa3d, float>::Regular(hoaOrder, nOutputs);
-    decoder = new Decoder<Hoa3d, float>::Binaural(hoaOrder);
+    decoder = new Decoder<Hoa3d, float>::Regular(hoaOrder, nOutputs);
+//    decoder = new Decoder<Hoa3d, float>::Binaural(hoaOrder);
     decoder->computeRendering(bufferSize);
     
     // CHOOSE OPTIM
@@ -76,7 +74,6 @@ void ofApp::setup(){
         hoaCoord->setSourcePositionDirect(i, ofVec3f(300,300,300));
     }
     
-    cout << "coord2" << endl;
     // SET CAM POSITION
     cam.setPosition(ofGetWidth()/2, ofGetHeight()/2, 640);
     cam.setVFlip(true);
@@ -87,7 +84,6 @@ void ofApp::setup(){
     light.setPosition(0,0,10);
     light.lookAt(ofVec3f(ofGetWidth()/2, ofGetHeight(), 0));
 
-    cout << "setup audio" << endl;
     // INITIALIZE AUDIO
     soundStream.setup(this, nOutputs, nInputs, sampleRate, bufferSize, nBuffers);
 }
@@ -95,12 +91,6 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    //cout << "updqte" << endl;
-    if(!hoaCoord)
-    {
-        //cout << "empty" << endl;
-        return;
-    }
     for (int i = 0; i<numberOfSources; i++) {
         
         seed[i]+=0.01;
@@ -129,7 +119,6 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    //cout << "draw" << endl;
     ofBackground(0);
 
     cam.begin();
@@ -147,8 +136,6 @@ void ofApp::draw(){
     }
 
     cam.end();
-
-
 }
 
 //--------------------------------------------------------------
@@ -198,8 +185,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 //--------------------------------------------------------------
 void ofApp::audioOut(float * output, int bufferSize, int nChannels){
-   
-    //cout << "audioOut" << endl;
+
     for (int i = 0; i<bufferSize; i++) {
         
         hoaCoord->process();
@@ -232,11 +218,4 @@ void ofApp::exit(){
     delete encoder;
     delete decoder;
     delete optim;
-    sphere.clear();
-    position.clear();
-    velocity.clear();
-    seed.clear();
-    sphereColor.clear();
-    oscillator.clear();
-    
 }

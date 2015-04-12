@@ -28,18 +28,17 @@ class ofApp : public ofBaseApp{
     ofCamera cam;
     ofLight light;
     int numberOfSources;
-    ofSpherePrimitive centralSphere, sphereOfSpeakers;
+    ofSpherePrimitive centralSphere;
     ofVec3f centralSpherePosition;
     float centralSphereRadius;
     vector<ofSpherePrimitive> sphere;
     vector<ofVec3f> position;
     vector<ofVec3f> velocity;
     vector<ofVec3f> seed;
-    ofVec3f relativePosition;
     vector<ofColor> sphereColor;
 
     float velMax;
-    
+
     ofSoundStream soundStream;
     
     int nOutputs, nInputs, sampleRate, bufferSize, nBuffers;

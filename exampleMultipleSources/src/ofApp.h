@@ -36,7 +36,6 @@ class ofApp : public ofBaseApp{
     
     float * inputBuffer;
     float * harmonicsBuffer;
-    float * lineValues;
 
     ofSoundStream soundStream;
     int nInputs, nOutputs, nChannels, nBuffers, sampleRate, bufferSize;
