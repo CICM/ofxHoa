@@ -12,7 +12,7 @@
 #define OSC_BUFFER_SIZE 4096
 
 #include <stdio.h>
-#include "../HoaLibrary-light/Sources/Defs.hpp"
+#include "../HoaLibrary-light/Sources/Hoa.hpp"
 
 
 namespace hoa {

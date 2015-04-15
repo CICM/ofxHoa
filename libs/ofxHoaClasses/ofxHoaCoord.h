@@ -6,7 +6,7 @@
 #ifndef __OFX_HOA_COORD__
 #define __OFX_HOA_COORD__
 
-#include "../HoaLibrary-light/Sources/Defs.hpp"
+#include "../HoaLibrary-light/Sources/Hoa.hpp"
 #include "ofMain.h"
 
 namespace hoa {

@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ofSetFullscreen(true);
+
     //    UNCOMMENT THIS LINE TO PRINT AVALIABLE AUDIO DEVICES
 //    ofSoundStreamListDevices();
     

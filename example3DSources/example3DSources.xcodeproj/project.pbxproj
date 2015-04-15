@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A18CDC58119667E6C0510938 /* Source.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84A35BC418ED9778E571E962 /* Source.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -72,7 +71,6 @@
 		59C4E10826F056938BFB0863 /* Voronoi.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Voronoi.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Voronoi.hpp"; sourceTree = SOURCE_ROOT; };
 		6218AD7D60658E29858270CC /* Hoa.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Hoa.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Hoa.hpp"; sourceTree = SOURCE_ROOT; };
 		68911386ED64AB7157CB0170 /* Meter.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Meter.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Meter.hpp"; sourceTree = SOURCE_ROOT; };
-		84A35BC418ED9778E571E962 /* Source.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Source.cpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Source.cpp"; sourceTree = SOURCE_ROOT; };
 		8E01F0E0DD6DDC8F64E44B95 /* Optim.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Optim.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Optim.hpp"; sourceTree = SOURCE_ROOT; };
 		986635D9DE756DBCE99B3E84 /* Projector.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Projector.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Projector.hpp"; sourceTree = SOURCE_ROOT; };
 		991FF2A6D62B1D5D32BB2A00 /* Vector.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Vector.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Vector.hpp"; sourceTree = SOURCE_ROOT; };
@@ -164,7 +162,6 @@
 				E1C8CE47C1D3CBF3DA4026C5 /* Rotate.hpp */,
 				9EAE7A59BEF09EBFF1F8C8FA /* Scope.hpp */,
 				DAE3733BC0D94D61D1965743 /* Signal.hpp */,
-				84A35BC418ED9778E571E962 /* Source.cpp */,
 				F2D72A3D4988BFB868B1F36C /* Source.hpp */,
 				0190812EA96FA79079A4F708 /* Tools.hpp */,
 				991FF2A6D62B1D5D32BB2A00 /* Vector.hpp */,
@@ -383,7 +380,6 @@
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
-				A18CDC58119667E6C0510938 /* Source.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
