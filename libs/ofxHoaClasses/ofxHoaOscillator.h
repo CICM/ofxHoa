@@ -11,7 +11,6 @@
 
 #define OSC_BUFFER_SIZE 4096
 
-#include <stdio.h>
 #include "../HoaLibrary-light/Sources/Hoa.hpp"
 
 
@@ -33,9 +32,9 @@ private:
     
     T _step;
     
-    T _buffer[OSC_BUFFER_SIZE];
-    
     int _index;
+    
+    T _buffer[OSC_BUFFER_SIZE];
     
     void normalize();
     
@@ -165,10 +164,10 @@ void ofxHoaOscillator<T>::setPhase(T phase) {
 
 template<typename T>
 void ofxHoaOscillator<T>::normalize(){
-    float factor = 0;
+    float factor = 1.0;
     
     for (int i = 0; i<OSC_BUFFER_SIZE;i++){
-        if (_buffer[i]>factor) factor = _buffer[i];
+        if (abs(_buffer[i])>factor) factor = abs(_buffer[i]);
     }
     for (int i = 0; i<OSC_BUFFER_SIZE;i++){
         _buffer[i]/=factor;
