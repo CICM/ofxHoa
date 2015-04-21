@@ -127,7 +127,6 @@ void ofApp::draw(){
     ofSetColor(ofColor::papayaWhip);
 
     centralSphere.draw();
-
     for (int i = 0; i<numberOfSources; i++) {
 
         ofSetColor(sphereColor[i]);
@@ -136,6 +135,8 @@ void ofApp::draw(){
     }
 
     cam.end();
+    ofSetColor(ofColor::white);
+
 }
 
 //--------------------------------------------------------------
