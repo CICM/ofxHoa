@@ -1,0 +1,8 @@
+examples3DSources/bin/*
+!examples3DSources/bin/data/
+
+examplesMultipleSources/bin/*
+!examplesMultipleSources/bin/data/
+
+exampleOneSource/bin/*
+!examplesOneSource/bin/data/
