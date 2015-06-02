@@ -6,3 +6,5 @@ examplesMultipleSources/bin/*
 
 exampleOneSource/bin/*
 !examplesOneSource/bin/data/
+
+*.app
