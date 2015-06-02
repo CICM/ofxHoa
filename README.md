@@ -1,9 +1,7 @@
 ofxHoa
 ================
 
-ofxHoa is a wrapper of the High Order Ambisonics (Hoa) Library. It’s a versatile
-tool for sound spacialization in 2D and 3D that includes not only ambisonic models, but also binaural and plane wave ones.
-The compiled versions of the library support OS X, Windows and Linux. For openFrameworks we only support OS X. Windows and Linux are still a work in progress.
+ofxHoa is a wrapper of the [Hoa Library](https://github.com/CICM/HoaLibrary-Light "Hoa Library") (High Order Ambisonics), a set of C++ classes for sound spatialization in 2D and 3D based on Ambisonics. The current versions of the HoaLibrary support OS X, Windows and Linux. For openFrameworks we only support OS X. Windows and Linux are still a work in progress.
 
 ## IMPORTANT INSTALLATION NOTES
 
