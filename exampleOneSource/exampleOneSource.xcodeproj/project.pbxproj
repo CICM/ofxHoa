@@ -67,7 +67,6 @@
 		3E10A66180CDBA7C978E1764 /* Harmonics.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Harmonics.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Harmonics.hpp"; sourceTree = SOURCE_ROOT; };
 		4B2C781104A15351EB6993D3 /* Defs.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Defs.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Defs.hpp"; sourceTree = SOURCE_ROOT; };
 		545BDBFC9096189763C6B4C6 /* Decoder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Decoder.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Decoder.hpp"; sourceTree = SOURCE_ROOT; };
-		563E00609BC319E856F2662A /* Hrtf.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Hrtf.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Hrtf.hpp"; sourceTree = SOURCE_ROOT; };
 		59C4E10826F056938BFB0863 /* Voronoi.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Voronoi.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Voronoi.hpp"; sourceTree = SOURCE_ROOT; };
 		6218AD7D60658E29858270CC /* Hoa.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Hoa.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Hoa.hpp"; sourceTree = SOURCE_ROOT; };
 		68911386ED64AB7157CB0170 /* Meter.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Meter.hpp; path = "../../../addons/ofxHoa/libs/HoaLibrary-Light/Sources/Meter.hpp"; sourceTree = SOURCE_ROOT; };
@@ -152,7 +151,6 @@
 				A02F5BEC7DEA69D4FE8EEECA /* Encoder.hpp */,
 				3E10A66180CDBA7C978E1764 /* Harmonics.hpp */,
 				6218AD7D60658E29858270CC /* Hoa.hpp */,
-				563E00609BC319E856F2662A /* Hrtf.hpp */,
 				3299B5F0527C1EE60A9B4C50 /* Math.hpp */,
 				68911386ED64AB7157CB0170 /* Meter.hpp */,
 				8E01F0E0DD6DDC8F64E44B95 /* Optim.hpp */,
