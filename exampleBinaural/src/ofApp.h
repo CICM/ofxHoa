@@ -50,8 +50,8 @@ public:
     float input;
     float harmonicsBuffer[order*2+1];
     
-    float ** const harmonicMatrix;
-    float ** const outputMatrix;
+    float ** harmonicMatrix;
+    float ** outputMatrix;
     
     float circleRadius;
     ofVec3f circleCenter;

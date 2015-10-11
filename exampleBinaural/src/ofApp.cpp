@@ -149,30 +149,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
     
 }
 
-void ofApp::audioOut( float * output, int bufferSize, int nChannels){
-    
-    for (int i = 0; i<bufferSize; i++) {
-        
-        // CALCULATE SMOOTHED VALUES
-        hoaCoord.process();
-        
-        // CREATE AUDIO INPUT. THE LAST MULTIPLICATION IS THE VOLUME (SHOULD BE BETWEEN 0 AND 1)
-//        inputBuffer[i] = myOsc.tick()*(myEnv.tick()+1)*0.05;
-        input = myOsc.tick()*(myEnv.tick()+1)*0.05;
-        // SET SMOOTHED CURRENT RADIUS AND AZIMUTH
-        hoaEncoder.setRadius(hoaCoord.getRadius(0));
-        hoaEncoder.setAzimuth(hoaCoord.getAzimuth(0));
-        
-        // CREATE THE SPHERICAL HARMONICS
-        hoaEncoder.process(&input, harmonicsBuffer);
-
-        // PROCESS THE HARMONICS WITH OPTIM
-        hoaOptim.process(harmonicsBuffer, harmonicsBuffer);
-        
-        // DECODE THE HARMONICS; AUDIO TREATEMENTS ARE POSSIBLE IN BETWEEN THESE STEPS
-        hoaDecoder.process(harmonicsBuffer, output+i*nChannels);
-        }
-    
+void ofApp::audioOut( float * output, int bufferSize, int nChannels){    
     
     for (int i = 0; i<bufferSize; i++) {
         
@@ -186,7 +163,7 @@ void ofApp::audioOut( float * output, int bufferSize, int nChannels){
             harmonicMatrix[j][i] = harmonicsBuffer[j];
         }
     }
-    hoaDecoder.processBlock(harmonicMatrix), outputMatrix);
+    hoaDecoder.processBlock(const_cast<const float **>(harmonicMatrix), outputMatrix);
 
     for (int i = 0; i<bufferSize; i++) {
         output[i*nChannels] = outputMatrix[0][i];
