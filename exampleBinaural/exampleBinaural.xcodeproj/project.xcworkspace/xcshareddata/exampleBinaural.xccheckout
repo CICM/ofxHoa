@@ -22,7 +22,7 @@
 		<key>2FFF2BF69BB0C863F897CA4B5613034382303A01</key>
 		<string>../../..</string>
 		<key>5B4B1295257546E4C2809C4B80513989C199CD34</key>
-		<string>../../..libs/</string>
+		<string>../../..libs</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/CICM/ofxHoa</string>
@@ -36,25 +36,25 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>5B4B1295257546E4C2809C4B80513989C199CD34</string>
-			<key>IDESourceControlWCCName</key>
-			<string>HoaLibrary-Light</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>5B4B1295257546E4C2809C4B80513989C199CD34</string>
-			<key>IDESourceControlWCCName</key>
-			<string>libs</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>2FFF2BF69BB0C863F897CA4B5613034382303A01</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ofxHoa</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>5B4B1295257546E4C2809C4B80513989C199CD34</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxHoalibs</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>5B4B1295257546E4C2809C4B80513989C199CD34</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxHoalibs</string>
 		</dict>
 	</array>
 </dict>

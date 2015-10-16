@@ -2,36 +2,20 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
-    //    UNCOMMENT THIS LINE TO PRINT AVALIABLE AUDIO DEVICES
-//    ofSoundStreamListDevices();
     
-    // USE THIS FUNCTION TO SET THE AUDIO DEVICE IF NECESSARY
-//    soundStream.setDeviceID(5);   
-
-    // ASSIGN AUDIO PARAMETERS
-
     nOutputs = 2;
     nInputs = 0;
     sampleRate = 44100;
     nBuffers = (nInputs+nOutputs)*2;
     
-    // INITIALIZE INPUT TO 0
     input = 0;
-    
-    // SETUP TEST OSCILATOR
+
     myOsc.setup(sampleRate, OF_SQUARE_WAVE);
     myOsc.setFrequency(330);
     myEnv.setup(sampleRate, OF_SAWTOOTH_WAVE);
     myEnv.setFrequency(-2);
     
-    // SETUP HOA
-    
-    //CREATE THE SPHERICAL HARMONICS BUFFER, IT MUST HAVE ORDER*2+1 VALUES FOR 2 DIMENSIONS
-//    harmonicsBuffer = new float[order*2+1];
-    
-    // THE ENCODER CALCULATES THE SPHERICAL HARMONICS
-//    hoaEncoder = new Encoder<Hoa2d, float>::DC(order);
+
     harmonicMatrix = new float * [order * 2+1];
     
     for (int i = 0; i< order*2+1;++i) harmonicMatrix[i] = new float[bufferSize];
@@ -39,49 +23,23 @@ void ofApp::setup(){
     outputMatrix = new float * [2];
     outputMatrix[0] = new float[bufferSize];
     outputMatrix[1] = new float[bufferSize];
-    
-    /* THE DECODER TRANSLATES THE HARMONICS INTO AUDIO SIGNALS FOR OUTPUT.
-     THE NUMBER OF MINIMUM OUPUT CHANNELS FOR REGULAR MODE = ORDER*2+1
-     SMALLER VALUES MAY BE USED, BUT THE RESULTING SOUND WON'T BE AS EXPECTED 
-     FOR SMALL DIFFERENCES ( 5 OR 6 INSTEAD OF 7 SPEAKERS) IRREGULAR MODE MAY BE USED */
-//    hoaDecoder = new Decoder<Hoa2d, float>::Regular(order, nOutputs);
-    
-    // BINAURAL MODE SET FOR USE WITH HEADPHONES
-//    hoaDecoder = new Decoder<Hoa2d, float>::Binaural(order);
-    
-    /* RENDERING IS COMPUTED IN RELATION TO THE SPEAKER'S ANGLES
-     THEY MAYBE SET WITH THE FUNCTION hoaDecoder.setPlanewaveAzimuth(const ulong index,
-     const float azimuth); */
+    hoaDecoder.setCropSize(256);
+ 
     hoaDecoder.computeRendering(bufferSize);
 
-    /*THE OPTIM ALLOWS TO ACOUNT FOR DISPLACEMENTS IN IDEAL SPEAKER POSITION
-     "Basic" WORKS AS A BYPASS.
-     "InPhase" AND "MaxRe" SHOULD BE USED IF THE AMBSIONICS CIRCLE/SPHERE IS NOT PERFECT */
-//     hoaOptim = new Optim<Hoa2d, float>::Basic(order);
-//    hoaOptim = new Optim<Hoa2d, float>::InPhase(order);
-    
-    // ofxHoaCoord USED TO SET SOURCE POSITION AND VOID CLICKS IN AUDIO
-//    hoaCoord = new ofxHoaCoord<Hoa2d, float>(1);
-    
-    // SET THE POSITION IN SCREEN THAT'LL REPRESENT THE CENTER OF THE SPEAKER CIRCLE
-    // AND IT'S RADIUS
     circleCenter = ofVec3f(ofGetWidth()/2,ofGetHeight()/2);
     circleRadius = 100;
+    
     hoaCoord.setAmbisonicCenter(circleCenter);
     hoaCoord.setAmbisonicRadius(circleRadius);
     
-    // SET THE RAMP FOR INTERPOLATION IN MILLISECONDS
+
     hoaCoord.setRamp(50, sampleRate);
     
-    // FUNCTIONS TO SET THE POSITION OF THE ENCODED SOUND SOURCE
-    // FAR AWAY TO AVOID CLICKS IN THE BEGINING
     hoaCoord.setSourcePositionDirect(0, ofVec3f(10000,10000));
     
-    
-    // MAKE A PRETTIER CIRCLE
     ofSetCircleResolution(50);
     
-        //INITIALIZE SOUNDSTREAM
     soundStream.setup(this, nOutputs, nInputs, sampleRate, bufferSize, nBuffers);
 }
 
@@ -149,7 +107,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
     
 }
 
-void ofApp::audioOut( float * output, int bufferSize, int nChannels){    
+void ofApp::audioOut( float * output, int bufferSize, int nChannels){
     
     for (int i = 0; i<bufferSize; i++) {
         
@@ -159,13 +117,14 @@ void ofApp::audioOut( float * output, int bufferSize, int nChannels){
         hoaEncoder.setAzimuth(hoaCoord.getAzimuth(0));
         hoaEncoder.process(&input, harmonicsBuffer);
         hoaOptim.process(harmonicsBuffer, harmonicsBuffer);
+        
         for (int j = 0; j<order*2+1; j++) {
             harmonicMatrix[j][i] = harmonicsBuffer[j];
         }
     }
     hoaDecoder.processBlock(const_cast<const float **>(harmonicMatrix), outputMatrix);
 
-    for (int i = 0; i<bufferSize; i++) {
+    for (int i = 0; i<bufferSize; ++i) {
         output[i*nChannels] = outputMatrix[0][i];
         output[i*nChannels+1] = outputMatrix[1][i];
     }
