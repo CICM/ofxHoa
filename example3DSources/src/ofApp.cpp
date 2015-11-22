@@ -52,8 +52,7 @@ void ofApp::setup(){
     encoder = new Encoder<Hoa3d, float>::Multi(hoaOrder, numberOfSources);
     
     // CHOOSE DECODER
-//    decoder = new Decoder<Hoa3d, float>::Regular(hoaOrder, nOutputs);
-    decoder = new Decoder<Hoa3d, float>::Binaural(hoaOrder);
+    decoder = new Decoder<Hoa3d, float>::Regular(hoaOrder, nOutputs);
     decoder->computeRendering(bufferSize);
     
     // CHOOSE OPTIM
