@@ -1,3 +1,3 @@
-[submodule "libs/HoaLibrary-Light"]
-	path = libs/HoaLibrary-Light
-	url = https://github.com/CICM/HoaLibrary-Light.git
+[submodule "libs/HoaLibrary-light"]
+	path = libs/HoaLibrary-light
+	url = https://github.com/CICM/HoaLibrary-light
