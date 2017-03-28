@@ -2,12 +2,10 @@
 
 #include "ofMain.h"
 #include "ofxHoa.h"
+#include <memory>
 
-// DON'T FORGET TO USE THE NAMESPACE HOA
-using namespace hoa;
 
 class ofApp : public ofBaseApp{
-
 
 
     public:
@@ -26,19 +24,19 @@ class ofApp : public ofBaseApp{
         void gotMessage(ofMessage msg);
 
         void audioOut(float * output, int bufferSize, int nChannels);
-        void exit();
 
-        ofxHoaOscillator<float> myOsc, myEnv;
+        hoa::ofxHoaOscillator<float> myOsc, myEnv;
 
-        //MOST HOA CLASSES REQUIRE ARGUMENTS FOR INITILIZATION, SO WE CREATE THEM AS POINTERS
-        Encoder<Hoa2d, float>::DC * hoaEncoder;
-        Decoder<Hoa2d, float> * hoaDecoder;
-        Optim<Hoa2d, float> * hoaOptim;
-        ofxHoaCoord<Hoa2d, float> * hoaCoord;
+        // most hoa classes require arguments for initilization, so we create
+        // them as pointers
+        unique_ptr<hoa::Encoder<hoa::Hoa2d, float>::DC> hoaEncoder;
+        unique_ptr<hoa::Decoder<hoa::Hoa2d, float> > hoaDecoder;
+        unique_ptr<hoa::Optim<hoa::Hoa2d, float> > hoaOptim;
+        unique_ptr<hoa::ofxHoaCoord<hoa::Hoa2d, float> > hoaCoord;
         ofSoundStream soundStream;
 
         float input;
-        float * harmonicsBuffer;
+        vector<float> harmonicsBuffer;
 
 
         int order;
